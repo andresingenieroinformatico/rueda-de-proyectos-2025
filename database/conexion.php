@@ -1,10 +1,5 @@
 <?php
-// database/conexion.php
-
 require_once __DIR__ . '/../config/config.php';
-
-// === CLIENTE SUPABASE SIMPLE CON cURL (SIN LIBRERÍAS) ===
-
 class SupabaseClient
 {
     private $url;
@@ -52,7 +47,6 @@ class SupabaseTable
     {
         $url = $this->base_url . '/rest/v1/' . $this->table;
 
-        // Construir query string
         $params = [];
         if (!empty($this->query['select'])) {
             $params[] = 'select=' . $this->query['select'];
@@ -76,9 +70,6 @@ class SupabaseTable
             "Content-Type: application/json"
         ]);
 
-        // Opcional: ignorar SSL (solo desarrollo)
-        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
@@ -97,8 +88,6 @@ class SupabaseTable
         return json_decode($response, true);
     }
 }
-
-// === FUNCIÓN GLOBAL: supabase() ===
 function supabase()
 {
     static $client = null;
