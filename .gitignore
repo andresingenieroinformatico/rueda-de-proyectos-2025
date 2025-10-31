@@ -3,4 +3,4 @@
 /.controllers/
 /.models
 /.htaccess
-/database
+/database/
