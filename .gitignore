@@ -1,4 +1,6 @@
 /.env
 /config/
-/src
+/.controllers/
+/.models
 /.htaccess
+/database
