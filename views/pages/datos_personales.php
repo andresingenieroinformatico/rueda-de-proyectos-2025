@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción - Rueda de Proyectos</title>
-    <link rel="stylesheet" href="./assets/css/datos_personales.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/datos_personales.css">
 </head>
 <body>
     <div class="container">
@@ -14,7 +14,7 @@
             Formulario completo para <strong>4 estudiantes</strong>. Complete todos los campos.
         </div>
 
-        <form action="procesar.php" method="POST">
+        <form action="index.php" method="POST">
 
             <!-- ESTUDIANTE 1 -->
             <div class="student-block">

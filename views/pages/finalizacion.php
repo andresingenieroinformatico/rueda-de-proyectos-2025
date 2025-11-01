@@ -7,19 +7,7 @@
     <link rel="stylesheet" href="./assets/css/finalizacion.css">
 </head>
 <body>
-    <header class="site-header">
-        <div class="container">
-            <nav class="top-nav">
-                <a href="#" class="brand">Rueda de Proyectos</a>
-                <ul class="nav-links">
-                    <li><a href="../Rueda Proyectos/index.html">Inicio</a></li>
-                    <li><a href="#proyectos">Proyectos</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
+<?php include __DIR__ . '/layouts/header.php'; ?>
     <main>
         <section class="final-section container">
             <h2>¡Inscripción Completa!</h2>
@@ -28,11 +16,6 @@
             <a href="./index.php" class="btn btn-primary">Volver al Inicio</a>
         </section>
     </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <p>&copy; 2024 Rueda de Proyectos. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+<?php include __DIR__ . '/layouts/footer.php'; ?>
 
 </html>
