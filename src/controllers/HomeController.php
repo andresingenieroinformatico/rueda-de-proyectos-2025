@@ -6,7 +6,7 @@ class HomeController
         $path = dirname(__DIR__, 2) . "/views/pages/{$file}.php";
 
         if (!file_exists($path)) {
-            die("❌ Vista no encontrada → {$path}");
+            die("Vista no encontrada → {$path}");
         }
 
         include $path;

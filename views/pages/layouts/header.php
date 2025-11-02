@@ -9,9 +9,7 @@
 <header>
     <h2>Rueda de Proyectos</h2>
     <nav>
-        <a href="?controller=home&action=index">Inicio</a>
-        <a href="?controller=proyecto&action=listar">Proyectos</a>
-        <a href="?controller=ponente&action=listar">Ponentes</a>
+        <a href="?controller=admin&action=login">Iniciar sesión</a>
     </nav>
 </header>
 <main>
