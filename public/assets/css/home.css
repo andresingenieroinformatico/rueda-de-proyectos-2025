@@ -1,109 +1,87 @@
-/* Reset básico para consistencia */
-* {
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    /* Paleta de colores: Verde, Azul, Blanco */
-    --primary-green: #4CAF50; /* Verde principal */
-    --primary-blue: #2196F3; /* Azul principal */
-    --accent-blue: #0D47A1; /* Azul más oscuro para acentos */
-    --light-green: #81C784; /* Verde claro para fondos */
-    --white: #FFFFFF; /* Blanco */
-    --gray-light: #F5F5F5; /* Gris claro para fondos neutros */
-    --gray-dark: #333333; /* Gris oscuro para texto */
-    --shadow: rgba(0, 0, 0, 0.1); /* Sombra sutil */
-}
-
-/* Tipografía formal */
-body {
-    font-family: 'Arial', sans-serif; /* Fuente sans-serif para formalidad */
+    background-color: #f0f8ff; /* Blanco con toque azul claro */
+    color: #333;
     line-height: 1.6;
-    color: var(--gray-dark);
-    background-color: var(--white);
 }
 
-/* Contenedor principal */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Sección Intro: Poster y texto lado a lado */
+/* Sección Intro */
 .intro {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    padding: 40px 0;
-    background: linear-gradient(135deg, var(--light-green) 0%, var(--primary-blue) 100%); /* Gradiente llamativo */
+    background-color: #ffffff; /* Blanco */
+    padding: 40px;
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
-    box-shadow: 0 4px 8px var(--shadow);
 }
 
 .poster {
     flex: 1;
     text-align: center;
+    margin-right: 20px;
 }
 
 .poster-img {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
-    box-shadow: 0 4px 8px var(--shadow);
 }
 
 .intro-text {
-    flex: 1;
-    padding-left: 20px;
-    color: var(--white);
+    flex: 2;
 }
 
 .intro-text h2 {
-    font-size: 2.5rem;
+    color: #007bff; /* Azul */
+    font-size: 2.5em;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .intro-text p {
     margin-bottom: 15px;
-    font-size: 1.1rem;
+    font-size: 1.1em;
+}
+
+.intro-text strong {
+    color: #28a745; /* Verde */
 }
 
 .btn {
     display: inline-block;
+    background-color: #007bff; /* Azul */
+    color: white;
     padding: 12px 24px;
     text-decoration: none;
     border-radius: 5px;
     font-weight: bold;
-    transition: all 0.3s ease; /* Transición suave */
+    transition: background-color 0.3s;
 }
 
-.btn-outline {
-    border: 2px solid var(--white);
-    color: var(--white);
-    background: transparent;
+.btn:hover {
+    background-color: #0056b3; /* Azul más oscuro */
 }
 
-.btn-outline:hover {
-    background: var(--white);
-    color: var(--primary-blue);
-    transform: translateY(-2px); /* Efecto hover llamativo */
-}
-
-/* Sección Proyectos: Grid de tarjetas */
+/* Sección Proyectos */
 .projects {
-    padding: 40px 0;
+    margin-bottom: 40px;
 }
 
 .projects h2 {
     text-align: center;
-    font-size: 2rem;
+    color: #28a745; /* Verde */
+    font-size: 2em;
     margin-bottom: 30px;
-    color: var(--primary-blue);
 }
 
 .projects-grid {
@@ -113,16 +91,15 @@ body {
 }
 
 .project-card {
-    background: var(--white);
+    background-color: #ffffff; /* Blanco */
     border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    box-shadow: 0 4px 8px var(--shadow);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s;
 }
 
 .project-card:hover {
-    transform: translateY(-5px); /* Efecto hover */
-    box-shadow: 0 8px 16px var(--shadow);
+    transform: translateY(-5px);
 }
 
 .project-card img {
@@ -132,105 +109,81 @@ body {
 }
 
 .project-card h3 {
+    color: #007bff; /* Azul */
     padding: 15px;
-    font-size: 1.5rem;
-    color: var(--primary-green);
+    margin: 0;
+    font-size: 1.5em;
 }
 
 .project-card p {
     padding: 0 15px 15px;
-    color: var(--gray-dark);
+    color: #666;
 }
 
-/* Sección Hero: Imagen de fondo con contenido */
+/* Sección Hero */
 .hero {
     position: relative;
-    height: 400px;
-    background: url('assets/img/Unipaz-Avanza.png') no-repeat center center/cover;
-    border-radius: 10px;
-    overflow: hidden;
-    margin: 40px 0;
-    box-shadow: 0 4px 8px var(--shadow);
-}
-
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(76, 175, 80, 0.7) 0%, rgba(33, 150, 243, 0.7) 100%); /* Overlay con colores */
-}
-
-.hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background-color: #e9f7ef; /* Verde muy claro */
+    padding: 60px 20px;
     text-align: center;
-    color: var(--white);
-    z-index: 1;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.hero-img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    margin-bottom: 20px;
 }
 
 .hero-content h1 {
-    font-size: 3rem;
+    color: #28a745; /* Verde */
+    font-size: 3em;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-}
-
-.btn-cta {
-    background: var(--primary-green);
-    color: var(--white);
-    border: none;
-}
-
-.btn-cta:hover {
-    background: var(--accent-blue);
-    transform: scale(1.05); /* Efecto hover */
+    font-size: 1.2em;
+    margin-bottom: 30px;
 }
 
 /* Sección Contacto */
 .contact {
-    text-align: center;
-    padding: 40px 0;
-    background: var(--gray-light);
+    background-color: #ffffff; /* Blanco */
+    padding: 40px;
     border-radius: 10px;
-    margin-top: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .contact h2 {
-    font-size: 2rem;
+    color: #007bff; /* Azul */
+    font-size: 2em;
     margin-bottom: 20px;
-    color: var(--primary-blue);
 }
 
 .contact p {
-    font-size: 1.1rem;
-    color: var(--gray-dark);
+    font-size: 1.1em;
+    color: #666;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
     .intro {
         flex-direction: column;
         text-align: center;
     }
-
-    .intro-text {
-        padding-left: 0;
-        padding-top: 20px;
+    
+    .poster {
+        margin-right: 0;
+        margin-bottom: 20px;
     }
-
+    
     .hero-content h1 {
-        font-size: 2rem;
+        font-size: 2em;
     }
-
+    
     .projects-grid {
         grid-template-columns: 1fr;
     }
