@@ -9,11 +9,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Determinar a qué plantilla se dirige según el semestre
     if ($semestre >= 1 && $semestre <= 3) {
         // Formularios de primer ciclo
-        header("Location: index.php?controller=home&action=inscripcion_1&id_persona=$id_persona&semestre=$semestre");
+        header("Location: index.php?controller=home&action=inscripcion_1&id_ponent=$id_ponent&semestre=$semestre");
         exit();
     } elseif ($semestre >= 4 && $semestre <= 9) {
         // Formularios de segundo ciclo
-        header("Location: index.php?controller=home&action=inscripcion_2&id_persona=$id_persona&semestre=$semestre");
+        header("Location: index.php?controller=home&action=inscripcion_2&id_ponent=$id_persona&semestre=$semestre");
         exit();
     } else {
         $error = "Por favor selecciona un semestre válido (1 a 9).";

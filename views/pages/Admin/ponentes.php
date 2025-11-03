@@ -39,19 +39,18 @@
         <th>Semestre</th>
         <th>Proyecto</th>
     </tr>
-    <?php foreach ($estudiantes as $e): ?>
+    <?php foreach ($ponentes as $e): ?>
         <tr>
-            <td><?= $e['id'] ?></td>
-            <td><?= htmlspecialchars($e['nombre']) ?></td>
-            <td><?= htmlspecialchars($e['apellido']) ?></td>
+            <td><?= $e['id_ponent'] ?></td>
+            <td><?= htmlspecialchars($e['nombres']) ?></td>
+            <td><?= htmlspecialchars($e['apellidos']) ?></td>
             <td><?= htmlspecialchars($e['semestre']) ?></td>
-            <td><?= htmlspecialchars($e['proyecto']) ?></td>
+            <td><?= htmlspecialchars($e['id_proyect']) ?></td>
         </tr>
     <?php endforeach; ?>
 </table>
 <?php else: ?>
 <p>No hay estudiantes registrados para este semestre.</p>
 <?php endif; ?>
- 
 </body>
 </html>

@@ -36,8 +36,17 @@
         Complete los datos del docente y del equipo (máximo 4 estudiantes).
     </div>
 
+<?php 
+    // CORREGIDO: LEER id_proyect
+    $id_proyect = $_GET['id_proyect'] ?? null;
+    if (!$id_proyect) {
+        die("Error: No se proporcionó el ID del proyecto.");
+    }
+    ?>
+
     <form action="index.php?controller=home&action=datos_personales" method="POST">
-        <!-- DOCENTE ORIENTADOR -->
+        <!-- CORREGIDO: ENVÍA EL ID -->
+        <input type="hidden" name="id_proyect" value="<?= htmlspecialchars($id_proyect) ?>">
         <div class="form-group">
             <label for="docente">Nombre del docente orientador:</label>
             <input type="text" id="docente" name="docente" required>
@@ -99,7 +108,7 @@
         </div>
         <?php endfor; ?>
 
-        <button type="submit" class="btn-submit">Siguiente</button>
+        <button type="submit" class="btn-submit">Terminar Inscripción</button>
     </form>
 
     <footer>
