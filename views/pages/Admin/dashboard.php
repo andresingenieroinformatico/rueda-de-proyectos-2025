@@ -13,7 +13,7 @@
         <li><a href="<?= BASE_URL ?>?controller=admin&action=dashboard">Inicio</a></li>
         <li><a href="<?= BASE_URL ?>?controller=admin&action=proyectos">Proyectos</a></li>
         <li><a href="<?= BASE_URL ?>?controller=admin&action=ponentes">Ponentes</a></li>
-        <li><a href="<?= BASE_URL ?>">Salir</a></li>
+        <li><a href="<?= BASE_URL ?>?controller=Admin&action=logout">Cerrar Sesión</a></li>
     </ul>
 </nav>
 

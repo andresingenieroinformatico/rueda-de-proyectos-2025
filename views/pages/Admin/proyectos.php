@@ -6,13 +6,13 @@
     <title>proyectos</title>
 </head>
 <body>
-    <nav class="navbar">
+<nav class="navbar">
     <h2>Panel del Administrador</h2>
     <ul>
         <li><a href="<?= BASE_URL ?>?controller=admin&action=dashboard">Inicio</a></li>
         <li><a href="<?= BASE_URL ?>?controller=admin&action=proyectos">Proyectos</a></li>
-        <li><a href="<?= BASE_URL ?>?controller=admin&action=estudiantes">Estudiantes</a></li>
-        <li><a href="<?= BASE_URL ?>">Salir</a></li>
+        <li><a href="<?= BASE_URL ?>?controller=admin&action=ponentes">Ponentes</a></li>
+        <li><a href="<?= BASE_URL ?>?controller=Admin&action=logout">Cerrar Sesión</a></li>
     </ul>
 </nav>
 

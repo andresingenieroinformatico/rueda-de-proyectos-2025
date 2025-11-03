@@ -71,9 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $result = file_get_contents($url, false, $context);
 
     if ($result === FALSE) {
-        $mensaje_resultado = "<p style='color:red;'>❌ Error al registrar el proyecto.</p>";
+        $mensaje_resultado = "<p style='color:red;'>Error al registrar el proyecto.</p>";
     } else {
-        $mensaje_resultado = "<p style='color:green;'>✅ Proyecto registrado correctamente.</p>";
+        $mensaje_resultado = "<p style='color:green;'>Proyecto registrado correctamente.</p>";
     }
 }
 ?>
@@ -92,9 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 <div class="container">
     <h1>Ficha de Inscripción (1er Semestre - Simplificada)</h1>
-    <form method="POST">
-
-        <!-- DATOS DEL PROYECTO -->
+    <form action="guardar" method="POST">
         <h2>Datos del Proyecto</h2>
 
         <div class="form-group">

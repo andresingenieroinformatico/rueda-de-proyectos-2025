@@ -25,7 +25,7 @@ require_once $controllerFile;
 // Verificar existencia de la clase
 if (!class_exists($controllerClass)) {
     http_response_code(500);
-    die("❌ Clase '{$controllerClass}' no definida en {$controllerFile}");
+    die("Clase '{$controllerClass}' no definida en {$controllerFile}");
 }
 
 // Crear instancia del controlador
@@ -34,7 +34,7 @@ $controllerInstance = new $controllerClass();
 // Verificar y ejecutar acción
 if (!method_exists($controllerInstance, $action)) {
     http_response_code(404);
-    die("❌ Acción '{$action}' no encontrada en {$controllerClass}");
+    die("Acción '{$action}' no encontrada en {$controllerClass}");
 }
 
 $controllerInstance->$action();

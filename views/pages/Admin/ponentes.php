@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ponentes</title>
 </head>
 <body>
-    <h2>Estudiantes <?= $semestre ? "del semestre $semestre" : '' ?></h2>
+    <nav class="navbar">
+        <h2>Panel del Administrador</h2>
+        <ul>
+            <li><a href="<?= BASE_URL ?>?controller=admin&action=dashboard">Inicio</a></li>
+            <li><a href="<?= BASE_URL ?>?controller=admin&action=proyectos">Proyectos</a></li>
+            <li><a href="<?= BASE_URL ?>?controller=admin&action=ponentes">Ponentes</a></li>
+            <li><a href="<?= BASE_URL ?>?controller=Admin&action=logout">Cerrar Sesión</a></li>
+        </ul>
+    </nav>
+    
+    <h2>Ponentes<?= $semestre ? "del semestre $semestre" : '' ?></h2>
 
 <form method="GET" action="">
     <input type="hidden" name="controller" value="admin">
-    <input type="hidden" name="action" value="estudiantes">
+    <input type="hidden" name="action" value="ponentes">
     <label>Selecciona un semestre:</label>
     <select name="semestre" onchange="this.form.submit()">
         <option value="">-- Seleccionar --</option>
@@ -20,7 +30,7 @@
     </select>
 </form>
 
-<?php if ($estudiantes): ?>
+<?php if ($ponentes): ?>
 <table border="1" cellpadding="8">
     <tr>
         <th>ID</th>

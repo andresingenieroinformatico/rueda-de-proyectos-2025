@@ -20,7 +20,6 @@ class ProyectoModel
             ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introducion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
             ->execute();
 
-        // ✅ Aseguramos que retorne un array
         return is_array($response) ? $response : [];
     }
 

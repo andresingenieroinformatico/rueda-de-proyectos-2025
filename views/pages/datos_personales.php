@@ -5,139 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción - Rueda de Proyectos</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/datos_personales.css">
+    <style>
+        .student-block { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 10px;
+            display: none;
+        }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-weight: bold; }
+        input, select { width: 100%; padding: 6px; }
+        .btn-submit {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-submit:hover { background-color: #0056b3; }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Rueda de Proyectos - Novena Edición</h1>
+<div class="container">
+    <h1>Rueda de Proyectos - Novena Edición</h1>
 
-        <div class="info-box">
-            Formulario completo para <strong>4 estudiantes</strong>. Complete todos los campos.
-        </div>
-
-        <form action="index.php" method="POST">
-
-            <!-- ESTUDIANTE 1 -->
-            <div class="student-block">
-                <h3>Estudiante 1</h3>
-                <div class="form-group">
-                    <label for="nombre1">Nombre completo:</label>
-                    <input type="text" id="nombre1" name="nombre1" required>
-                </div>
-                <div class="form-group">
-                    <label for="correo1">Correo institucional:</label>
-                    <input type="email" id="correo1" name="correo1" placeholder="ejemplo@unipaz.edu.co" required>
-                </div>
-                <div class="form-group">
-                    <label for="id1">Número de identificación:</label>
-                    <input type="text" id="id1" name="id1" required>
-                </div>
-                <div class="form-group">
-                    <label for="jornada1">Jornada:</label>
-                    <select id="jornada1" name="jornada1" required>
-                        <option value="">Seleccione</option>
-                        <option value="diurna">Diurna</option>
-                        <option value="nocturna">Nocturna</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="telefono1">Teléfono:</label>
-                    <input type="tel" id="telefono1" name="telefono1" required>
-                </div>
-            </div>
-
-            <!-- ESTUDIANTE 2 -->
-            <div class="student-block">
-                <h3>Estudiante 2</h3>
-                <div class="form-group">
-                    <label for="nombre2">Nombre completo:</label>
-                    <input type="text" id="nombre2" name="nombre2" required>
-                </div>
-                <div class="form-group">
-                    <label for="correo2">Correo institucional:</label>
-                    <input type="email" id="correo2" name="correo2" placeholder="ejemplo@unipaz.edu.co" required>
-                </div>
-                <div class="form-group">
-                    <label for="id2">Número de identificación:</label>
-                    <input type="text" id="id2" name="id2" required>
-                </div>
-                <div class="form-group">
-                    <label for="jornada2">Jornada:</label>
-                    <select id="jornada2" name="jornada2" required>
-                        <option value="">Seleccione</option>
-                        <option value="diurna">Diurna</option>
-                        <option value="nocturna">Nocturna</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="telefono2">Teléfono:</label>
-                    <input type="tel" id="telefono2" name="telefono2" required>
-                </div>
-            </div>
-
-            <!-- ESTUDIANTE 3 -->
-            <div class="student-block">
-                <h3>Estudiante 3</h3>
-                <div class="form-group">
-                    <label for="nombre3">Nombre completo:</label>
-                    <input type="text" id="nombre3" name="nombre3" required>
-                </div>
-                <div class="form-group">
-                    <label for="correo3">Correo institucional:</label>
-                    <input type="email" id="correo3" name="correo3" placeholder="ejemplo@unipaz.edu.co" required>
-                </div>
-                <div class="form-group">
-                    <label for="id3">Número de identificación:</label>
-                    <input type="text" id="id3" name="id3" required>
-                </div>
-                <div class="form-group">
-                    <label for="jornada3">Jornada:</label>
-                    <select id="jornada3" name="jornada3" required>
-                        <option value="">Seleccione</option>
-                        <option value="diurna">Diurna</option>
-                        <option value="nocturna">Nocturna</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="telefono3">Teléfono:</label>
-                    <input type="tel" id="telefono3" name="telefono3" required>
-                </div>
-            </div>
-
-            <!-- ESTUDIANTE 4 -->
-            <div class="student-block">
-                <h3>Estudiante 4</h3>
-                <div class="form-group">
-                    <label for="nombre4">Nombre completo:</label>
-                    <input type="text" id="nombre4" name="nombre4" required>
-                </div>
-                <div class="form-group">
-                    <label for="correo4">Correo institucional:</label>
-                    <input type="email" id="correo4" name="correo4" placeholder="ejemplo@unipaz.edu.co" required>
-                </div>
-                <div class="form-group">
-                    <label for="id4">Número de identificación:</label>
-                    <input type="text" id="id4" name="id4" required>
-                </div>
-                <div class="form-group">
-                    <label for="jornada4">Jornada:</label>
-                    <select id="jornada4" name="jornada4" required>
-                        <option value="">Seleccione</option>
-                        <option value="diurna">Diurna</option>
-                        <option value="nocturna">Nocturna</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="telefono4">Teléfono:</label>
-                    <input type="tel" id="telefono4" name="telefono4" required>
-                </div>
-            </div>
-            <button type="submit" class="btn-submit">Siguiente</button>
-        </form>
-
-        <footer>
-            <p>&copy; <?= date('Y') ?> Rueda de Proyectos - UNIPAZ. Todos los derechos reservados.</p>
-        </footer>
+    <div class="info-box">
+        Complete los datos del docente y del equipo (máximo 4 estudiantes).
     </div>
 
+    <form action="index.php?controller=registro&action=guardarDatosPersonales" method="POST">
+        <!-- DOCENTE ORIENTADOR -->
+        <div class="form-group">
+            <label for="docente">Nombre del docente orientador:</label>
+            <input type="text" id="docente" name="docente" required>
+        </div>
+
+        <!-- CANTIDAD DE ESTUDIANTES -->
+        <div class="form-group">
+            <label for="cantidad">Cantidad de estudiantes del proyecto:</label>
+            <select id="cantidad" name="cantidad" required>
+                <option value="">Seleccione</option>
+                <option value="1">1 estudiante</option>
+                <option value="2">2 estudiantes</option>
+                <option value="3">3 estudiantes</option>
+                <option value="4">4 estudiantes</option>
+            </select>
+        </div>
+
+        <!-- BLOQUES DE ESTUDIANTES -->
+        <?php for ($i = 1; $i <= 4; $i++): ?>
+        <div class="student-block" id="student<?= $i ?>">
+            <h3>Estudiante <?= $i ?></h3>
+            <div class="form-group">
+                <label for="nombres<?= $i ?>">Nombres:</label>
+                <input type="text" id="nombres<?= $i ?>" name="nombres<?= $i ?>">
+            </div>
+            <div class="form-group">
+                <label for="apellidos<?= $i ?>">Apellidos:</label>
+                <input type="text" id="apellidos<?= $i ?>" name="apellidos<?= $i ?>">
+            </div>
+            <div class="form-group">
+                <label for="cedula<?= $i ?>">Cédula:</label>
+                <input type="text" id="cedula<?= $i ?>" name="cedula<?= $i ?>">
+            </div>
+            <div class="form-group">
+                <label for="telefono<?= $i ?>">Teléfono:</label>
+                <input type="tel" id="telefono<?= $i ?>" name="telefono<?= $i ?>">
+            </div>
+            <div class="form-group">
+                <label for="semestre<?= $i ?>">Semestre:</label>
+                <select id="semestre<?= $i ?>" name="semestre<?= $i ?>">
+                    <option value="">Seleccione</option>
+                    <?php for ($s = 1; $s <= 10; $s++): ?>
+                        <option value="<?= $s ?>">Semestre <?= $s ?></option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="jornada<?= $i ?>">Jornada:</label>
+                <select id="jornada<?= $i ?>" name="jornada<?= $i ?>">
+                    <option value="">Seleccione</option>
+                    <option value="diurna">Diurna</option>
+                    <option value="nocturna">Nocturna</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="correo<?= $i ?>">Correo institucional:</label>
+                <input type="email" id="correo<?= $i ?>" name="correo<?= $i ?>" placeholder="ejemplo@unipaz.edu.co">
+            </div>
+        </div>
+        <?php endfor; ?>
+
+        <button type="submit" class="btn-submit">Siguiente</button>
+    </form>
+
+    <footer>
+        <p>&copy; <?= date('Y') ?> Rueda de Proyectos - UNIPAZ. Todos los derechos reservados.</p>
+    </footer>
+</div>
+
+<script>
+    const cantidadSelect = document.getElementById('cantidad');
+    cantidadSelect.addEventListener('change', function() {
+        const cantidad = parseInt(this.value);
+        for (let i = 1; i <= 4; i++) {
+            const bloque = document.getElementById('student' + i);
+            bloque.style.display = i <= cantidad ? 'block' : 'none';
+            bloque.querySelectorAll('input, select').forEach(el => {
+                el.required = i <= cantidad;
+            });
+        }
+    });
+</script>
 </body>
 </html>
