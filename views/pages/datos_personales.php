@@ -36,7 +36,7 @@
         Complete los datos del docente y del equipo (máximo 4 estudiantes).
     </div>
 
-    <form action="index.php?controller=registro&action=guardarDatosPersonales" method="POST">
+    <form action="index.php?controller=home&action=datos_personales" method="POST">
         <!-- DOCENTE ORIENTADOR -->
         <div class="form-group">
             <label for="docente">Nombre del docente orientador:</label>

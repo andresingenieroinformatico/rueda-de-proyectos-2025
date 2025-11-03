@@ -1,62 +1,39 @@
 <?php
-// inscripcion_1.php
+session_start();
 
 require_once __DIR__ . '/../../config/config.php';
 
 // Verifica que Supabase esté configurado
-if (empty(SUPABASE_URL) || empty(SUPABASE_KEY)) {
-    die("Error: Supabase no está configurado correctamente.");
-}
-
-// Si se envió el formulario
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Obtiene los datos del formulario
-    $linea = $_POST["linea"] ?? '';
-    $fase = $_POST["fase_avance_1"] ?? 'Propuesta';
-    $enfoque = $_POST["enfoque_1"] ?? '';
-    $asignaturas = $_POST["asignaturas_vinculadas"] ?? '';
-    $aportes = $_POST["aportes_asignaturas"] ?? '';
-    $titulo = $_POST["titulo"] ?? '';
-    $introduccion = $_POST["planteamiento_problema_1"] ?? '';
-    $problema = $_POST["planteamiento_problema_1"] ?? '';
-    $justificacion = $_POST["justificacion"] ?? '';
-    $objetivog = $_POST["objetivos"] ?? '';
-    $objetivoe = $_POST["objetivos"] ?? '';
-    $referentes = $_POST["interdisciplinariedad_1"] ?? '';
-    $metodologia = $_POST["desarrollo_proyectos_1"] ?? '';
-    $resultados = $_POST["resultados_esperados_1"] ?? '';
-    $conclusiones = $_POST["conclusiones_1"] ?? '';
-    $bibliografia = $_POST["bibliografia"] ?? '';
-    $feedback = $_POST["feedback_link"] ?? '';
-
-    // Crea el arreglo con los datos
+    // --- DATOS DEL PROYECTO ---
     $data = [
-        "linea" => $linea,
-        "fase" => $fase,
-        "enfoque" => $enfoque,
-        "asignaturas" => $asignaturas,
-        "aportes" => $aportes,
-        "titulo" => $titulo,
-        "introduccion" => $introduccion,
-        "problema" => $problema,
-        "justificacion" => $justificacion,
-        "objetivog" => $objetivog,
-        "objetivoe" => $objetivoe,
-        "referentes" => $referentes,
-        "metodologia" => $metodologia,
-        "resultados" => $resultados,
-        "conclusiones" => $conclusiones,
-        "bibliografia" => $bibliografia,
-        "feedback" => $feedback
+        "linea" => $_POST["linea"] ?? '',
+        "fase" => $_POST["fase_avance_1"] ?? 'Propuesta',
+        "enfoque" => $_POST["enfoque_1"] ?? '',
+        "asignaturas" => $_POST["asignaturas_vinculadas"] ?? '',
+        "aportes" => $_POST["aportes_asignaturas"] ?? '',
+        "titulo" => $_POST["titulo"] ?? '',
+        "introduccion" => $_POST["planteamiento_problema_1"] ?? '',
+        "problema" => $_POST["planteamiento_problema_1"] ?? '',
+        "justificacion" => $_POST["justificacion"] ?? '',
+        "objetivog" => $_POST["objetivos"] ?? '',
+        "objetivoe" => $_POST["objetivos"] ?? '',
+        "referentes" => $_POST["interdisciplinariedad_1"] ?? '',
+        "metodologia" => $_POST["desarrollo_proyectos_1"] ?? '',
+        "resultados" => $_POST["resultados_esperados_1"] ?? '',
+        "conclusiones" => $_POST["conclusiones_1"] ?? '',
+        "bibliografia" => $_POST["bibliografia"] ?? '',
+        "feedback" => $_POST["feedback_link"] ?? ''
     ];
 
-    // Inserta en Supabase
+    // --- INSERTAR EN datos_proyectos ---
     $url = SUPABASE_URL . "/rest/v1/datos_proyectos";
     $headers = [
         "Content-Type: application/json",
         "apikey: " . SUPABASE_KEY,
-        "Authorization: Bearer " . SUPABASE_KEY
+        "Authorization: Bearer " . SUPABASE_KEY,
+        "Prefer: return=representation"
     ];
 
     $options = [
@@ -73,9 +50,51 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if ($result === FALSE) {
         $mensaje_resultado = "<p style='color:red;'>Error al registrar el proyecto.</p>";
     } else {
-        $mensaje_resultado = "<p style='color:green;'>Proyecto registrado correctamente.</p>";
+        $response = json_decode($result, true);
+        $id_proyect = $response[0]['id_proyect'] ?? null;
+
+        if ($id_proyect) {
+            // --- GUARDAR LOS PONENTES ---
+            $ponentes_url = SUPABASE_URL . "/rest/v1/datos_ponentes";
+            $fecha = date('Y-m-d H:i:s');
+
+            $ponentes_data = [];
+            foreach ($_SESSION['estudiantes'] as $e) {
+                $ponentes_data[] = [
+                    "fecha" => $fecha,
+                    "nombres" => $e['nombres'],
+                    "apellidos" => $e['apellidos'],
+                    "cedula" => $e['cedula'],
+                    "telefono" => $e['telefono'],
+                    "semestre" => $e['semestre'],
+                    "jornada" => $e['jornada'],
+                    "correo" => $e['correo'],
+                    "id_proyect" => $id_proyect
+                ];
+            }
+
+            $options_ponentes = [
+                "http" => [
+                    "header" => implode("\r\n", $headers),
+                    "method" => "POST",
+                    "content" => json_encode($ponentes_data)
+                ]
+            ];
+
+            $context_ponentes = stream_context_create($options_ponentes);
+            $result_ponentes = file_get_contents($ponentes_url, false, $context_ponentes);
+
+            if ($result_ponentes === FALSE) {
+                $mensaje_resultado = "<p style='color:orange;'>Proyecto guardado, pero error al registrar ponentes.</p>";
+            } else {
+                $mensaje_resultado = "<p style='color:green;'>Proyecto y ponentes registrados correctamente.</p>";
+            }
+        } else {
+            $mensaje_resultado = "<p style='color:red;'>Error: no se obtuvo el ID del proyecto.</p>";
+        }
     }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -91,10 +110,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <?php if (!empty($mensaje_resultado)) echo $mensaje_resultado; ?>
 
 <div class="container">
-    <h1>Ficha de Inscripción (1er Semestre - Simplificada)</h1>
-    <form action="guardar" method="POST">
+    <h1>Ficha de Inscripción</h1>
+    <form action="index.php?controller=home&action=datos_personales" method="POST">
         <h2>Datos del Proyecto</h2>
-
         <div class="form-group">
             <label>Línea:</label>
             <div class="linea-radio">
@@ -130,12 +148,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         <div class="form-group">
             <label>Fase de avance:</label>
-            <input type="radio" name="fase_avance_1" value="Propuesta" checked> Propuesta
+            <input type="radio" name="fase_avance_1" value="Propuesta" checked>Propuesta</input>
         </div>
 
         <div class="form-group">
             <label>Enfoque de trabajo:</label>
-            <input type="radio" name="enfoque_1" value="Interdisciplinario" required> Interdisciplinario
+            <input type="radio" name="enfoque_1" value="Interdisciplinario" required>Interdisciplinario
             <input type="radio" name="enfoque_1" value="Multidisciplinario"> Multidisciplinario
             <input type="radio" name="enfoque_1" value="Transdisciplinario"> Transdisciplinario
         </div>

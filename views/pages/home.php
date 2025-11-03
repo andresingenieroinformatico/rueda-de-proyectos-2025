@@ -22,7 +22,7 @@
                 <p>Inscríbete a la novena rueda de proyectos, con la que podrás ver de manera objetiva, mejoras, cambios y desarrollos importantes que podrías realizar a tu proyecto.</p>
                 <p>Mejora tu proyecto e innova junto con muchos proyectos más y date a conocer a ti y a tus ideas con esta nueva edición de la rueda de proyectos.</p>
                 <p>Todo esto gracias a nuestro semillero de investigación <strong>SISINFO</strong>.</p>
-                <a href="<?= BASE_URL ?>?controller=home&action=datos_personales" class="btn">Más Información</a>
+                <a href="<?= BASE_URL ?>?controller=home&action=seleccionar_semestre" class="btn">Más Información</a>
             </div>
         </section>
 
@@ -67,7 +67,7 @@
             <div class="hero-content">
                 <h1>Novena Rueda de Proyectos</h1>
                 <p>Presenta tus ideas, mejora tu proyecto y conéctate con la comunidad.</p>
-                <a href="<?= BASE_URL ?>?controller=home&action=datos_personales" class="btn">Inscribete Ahora</a>
+                <a href="<?= BASE_URL ?>?controller=home&action=seleccionar_semestre" class="btn">Inscribete Ahora</a>
             </div>
         </div>
 
