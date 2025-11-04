@@ -7,15 +7,13 @@
     <link rel="stylesheet" href="./assets/css/finalizacion.css">
 </head>
 <body>
-<?php include __DIR__ . '/layouts/header.php'; ?>
     <main>
         <section class="final-section container">
             <h2>¡Inscripción Completa!</h2>
             <p>Gracias por inscribirte en la Novena Rueda de Proyectos. Hemos recibido tu información correctamente.</p>
             <p>Pronto nos pondremos en contacto contigo con más detalles sobre el evento.</p>
+            <img src="assets/img/Unipaz-Avanza.png" alt="Rueda de proyectos - evento" class="hero-img">
             <a href="./index.php" class="btn btn-primary">Volver al Inicio</a>
         </section>
     </main>
-<?php include __DIR__ . '/layouts/footer.php'; ?>
-
 </html>

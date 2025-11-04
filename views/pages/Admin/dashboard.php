@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Panel del Administrador</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/admin.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/dashboard.css">
 </head>
 <body>
 

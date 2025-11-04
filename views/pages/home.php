@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rueda de Proyectos</title>
-    <link rel="stylesheet" href="assets/css/home.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home.css">
 </head>
 <body>
 <?php include __DIR__ . '/layouts/header.php'; ?>
 
     <main class="container">
 
-        <!-- INTRO + PÓSTER -->
         <section id="inscripcion" class="intro">
             <div class="poster">
                 <img src="assets/img/SISINFO3.png" alt="Póster del evento" class="poster-img">
@@ -31,52 +30,28 @@
             <div class="projects-grid">
                 <article class="project-card">
                     <img src="assets/img/proyectos/proyecto1.jpg" alt="Miniatura proyecto 1">
-                    <h3>Primer rueda de proyectos</h3>
+                    <h3>Sexta rueda de proyectos</h3>
                     <p>Breve descripción del proyecto 1.</p>
                 </article>
                 <article class="project-card">
                     <img src="assets/img/proyectos/proyecto2.jpg" alt="Miniatura proyecto 2">
-                    <h3>Segunda rueda de proyectos</h3>
+                    <h3>Septima rueda de proyectos</h3>
                     <p>Breve descripción del proyecto 2.</p>
                 </article>
                 <article class="project-card">
                     <img src="assets/img/proyectos/proyecto3.jpg" alt="Miniatura proyecto 3">
-                    <h3>Tercer rueda de proyectos</h3>
+                    <h3>Octava rueda de proyectos</h3>
                     <p>Breve descripción del proyecto 3.</p>
-                </article>
-                <article class="project-card">
-                    <img src="assets/img/proyectos/proyecto4.jpg" alt="Miniatura proyecto 4">
-                    <h3>Cuarta rueda de proyectos</h3>
-                    <p>Breve descripción del proyecto 4.</p>
-                </article>
-                <article class="project-card">
-                    <img src="assets/img/proyectos/proyecto5.jpg" alt="Miniatura proyecto 5">
-                    <h3>Quinta rueda de proyectos</h3>
-                    <p>Breve descripción del proyecto 5.</p>
-                </article>
-                <article class="project-card">
-                    <img src="assets/img/proyectos/proyecto6.jpg" alt="Miniatura proyecto 6">
-                    <h3>Sexta rueda de proyectos</h3>
-                    <p>Breve descripción del proyecto 6.</p>
-                </article>
             </div>
         </section>
 
                 <div class="hero">
-            <img src="assets/img/Unipaz-Avanza.png" alt="Rueda de proyectos - evento" class="hero-img">
             <div class="hero-content">
                 <h1>Novena Rueda de Proyectos</h1>
                 <p>Presenta tus ideas, mejora tu proyecto y conéctate con la comunidad.</p>
                 <a href="<?= BASE_URL ?>?controller=home&action=seleccionar_semestre" class="btn">Inscribete Ahora</a>
             </div>
         </div>
-
-        <!-- CONTACTO -->
-        <section id="contacto" class="contact">
-            <h2>Contacto</h2>
-            <p>Correo: contacto@unipaz.edu · Tel: 000-000-000</p>
-        </section>
-
     </main>
 
     <?php include __DIR__ . '/layouts/footer.php'; ?>

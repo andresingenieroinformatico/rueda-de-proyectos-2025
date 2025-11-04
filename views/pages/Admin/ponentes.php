@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/ponentes.css">
     <title>Ponentes</title>
 </head>
 <body>
@@ -16,7 +17,7 @@
         </ul>
     </nav>
     
-    <h2>Ponentes<?= $semestre ? "del semestre $semestre" : '' ?></h2>
+    <h2>Ponentes<?= $semestre ? " del semestre $semestre" : '' ?></h2>
 
 <form method="GET" action="">
     <input type="hidden" name="controller" value="admin">
@@ -30,27 +31,35 @@
     </select>
 </form>
 
-<?php if ($ponentes): ?>
-<table border="1" cellpadding="8">
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Semestre</th>
-        <th>Proyecto</th>
-    </tr>
-    <?php foreach ($ponentes as $e): ?>
+<table border="1" cellpadding="8" style="width:100%; margin-top:20px;">
+    <thead>
         <tr>
-            <td><?= $e['id_ponent'] ?></td>
-            <td><?= htmlspecialchars($e['nombres']) ?></td>
-            <td><?= htmlspecialchars($e['apellidos']) ?></td>
-            <td><?= htmlspecialchars($e['semestre']) ?></td>
-            <td><?= htmlspecialchars($e['id_proyect']) ?></td>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Semestre</th>
+            <th>Proyecto</th>
         </tr>
-    <?php endforeach; ?>
+    </thead>
+    <tbody>
+        <?php if ($ponentes && count($ponentes) > 0): ?>
+            <?php foreach ($ponentes as $e): ?>
+                <tr>
+                    <td><?= $e['id_ponent'] ?></td>
+                    <td><?= htmlspecialchars($e['nombres']) ?></td>
+                    <td><?= htmlspecialchars($e['apellidos']) ?></td>
+                    <td><?= htmlspecialchars($e['semestre']) ?></td>
+                    <td><?= htmlspecialchars($e['id_proyect']) ?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <tr>
+                <td colspan="5" style="text-align:center; padding:20px; color:#888; font-style:italic;">
+                    No hay ponentes registrados para este semestre.
+                </td>
+            </tr>
+        <?php endif; ?>
+    </tbody>
 </table>
-<?php else: ?>
-<p>No hay estudiantes registrados para este semestre.</p>
-<?php endif; ?>
 </body>
 </html>

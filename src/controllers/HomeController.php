@@ -161,7 +161,7 @@ public function datos_personales()
                 echo "Error al registrar el proyecto: " . $e->getMessage();
             }
         } else {
-            $this->view('inscripcion_1');
+            $this->view('inscripcion_2-9');
         }
     }
 

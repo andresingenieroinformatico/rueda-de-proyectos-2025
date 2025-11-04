@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Rueda de Proyectos</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/header.css">
 </head>
 <body>
 <header>
