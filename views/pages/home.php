@@ -7,10 +7,8 @@
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home.css">
 </head>
 <body>
-<?php include __DIR__ . '/layouts/header.php'; ?>
-
+    <?php include __DIR__ . '/layouts/header.php'; ?>
     <main class="container">
-
         <section id="inscripcion" class="intro">
             <div class="poster">
                 <img src="assets/img/SISINFO3.png" alt="Póster del evento" class="poster-img">
@@ -53,9 +51,6 @@
             </div>
         </div>
     </main>
-
     <?php include __DIR__ . '/layouts/footer.php'; ?>
-
-
 </body>
 </html>
