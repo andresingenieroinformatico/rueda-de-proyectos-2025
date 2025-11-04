@@ -12,4 +12,5 @@
         <a href="?controller=admin&action=login">Iniciar sesión</a>
     </nav>
 </header>
-<main>
+</body>
+</html>

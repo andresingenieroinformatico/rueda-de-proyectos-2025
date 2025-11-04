@@ -26,53 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Seleccionar Semestre</title>
-    <link rel="stylesheet" href="public/css/estilos.css"> <!-- si tienes CSS -->
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f6fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 350px;
-        }
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        label, select, button {
-            width: 100%;
-            display: block;
-            margin-bottom: 15px;
-        }
-        select {
-            padding: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background: #2c3e50;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #34495e;
-        }
-        .error {
-            color: red;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/seleccionar_semestre.css">
 </head>
 <body>
     <div class="container">

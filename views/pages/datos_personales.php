@@ -37,7 +37,6 @@
     </div>
 
 <?php 
-    // CORREGIDO: LEER id_proyect
     $id_proyect = $_GET['id_proyect'] ?? null;
     if (!$id_proyect) {
         die("Error: No se proporcionó el ID del proyecto.");
@@ -45,14 +44,11 @@
     ?>
 
     <form action="index.php?controller=home&action=datos_personales" method="POST">
-        <!-- CORREGIDO: ENVÍA EL ID -->
         <input type="hidden" name="id_proyect" value="<?= htmlspecialchars($id_proyect) ?>">
         <div class="form-group">
             <label for="docente">Nombre del docente orientador:</label>
             <input type="text" id="docente" name="docente" required>
         </div>
-
-        <!-- CANTIDAD DE ESTUDIANTES -->
         <div class="form-group">
             <label for="cantidad">Cantidad de estudiantes del proyecto:</label>
             <select id="cantidad" name="cantidad" required>
@@ -63,8 +59,6 @@
                 <option value="4">4 estudiantes</option>
             </select>
         </div>
-
-        <!-- BLOQUES DE ESTUDIANTES -->
         <?php for ($i = 1; $i <= 4; $i++): ?>
         <div class="student-block" id="student<?= $i ?>">
             <h3>Estudiante <?= $i ?></h3>
@@ -116,18 +110,6 @@
     </footer>
 </div>
 
-<script>
-    const cantidadSelect = document.getElementById('cantidad');
-    cantidadSelect.addEventListener('change', function() {
-        const cantidad = parseInt(this.value);
-        for (let i = 1; i <= 4; i++) {
-            const bloque = document.getElementById('student' + i);
-            bloque.style.display = i <= cantidad ? 'block' : 'none';
-            bloque.querySelectorAll('input, select').forEach(el => {
-                el.required = i <= cantidad;
-            });
-        }
-    });
-</script>
+<script src="<?= BASE_URL ?>assets/js/datos_personales.js"></script>
 </body>
 </html>

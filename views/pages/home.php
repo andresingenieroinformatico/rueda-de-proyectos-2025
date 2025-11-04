@@ -6,6 +6,7 @@
     <title>Rueda de Proyectos</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home.css">
 
+
 </head>
 <body>
     <?php include __DIR__ . '/layouts/header.php'; ?>
@@ -38,7 +39,7 @@
                     <p>Breve descripción del proyecto 2.</p>
                 </article>
                 <article class="project-card">
-                    <img src="assets/img/proyectos/proyecto3.jpg" alt="Miniatura proyecto 3">
+                    <img src="assets/img/octava_rueda.jpg" alt="Miniatura proyecto 3">
                     <h3>Octava rueda de proyectos</h3>
                     <p>Breve descripción del proyecto 3.</p>
             </div>
@@ -51,9 +52,9 @@
                 <a href="<?= BASE_URL ?>?controller=home&action=seleccionar_semestre" class="btn">Inscribete Ahora</a>
             </div>
         </div>
-
-        <?php include __DIR__ . '/layouts/footer.php'; ?>
     </main>
-    
+    <?php include __DIR__ . '/layouts/footer.php'; ?>
+
+
 </body>
 </html>

@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #f8f9fa;
+    background-color: #f0f8ff; /* Cambié a #f0f8ff para que coincida con home.css y evite conflictos */
     color: #333;
 }
 
@@ -42,11 +42,8 @@ nav a:hover {
     background-color: #0056b3;
 }
 
-main {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: auto;
-}
+/* Eliminé los estilos de 'main' porque causaban el conflicto de espacios laterales/inferiores */
+
 @media (max-width: 768px) {
     header {
         flex-direction: column;

@@ -1,3 +1,4 @@
+/* Estilos generales */
 body {
     margin: 0;
     padding: 0;
@@ -8,15 +9,19 @@ body {
     color: #333;
 }
 
+/* Contenedor principal (main) */
 .container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-}
-main.container {
-    flex: 1; /* hace que el contenido principal empuje el footer hacia abajo */
+    display: flex; /* Agregado para hacer flexbox y centrar contenido */
+    flex-direction: column; /* Apila secciones verticalmente */
+    align-items: center; /* Centra horizontalmente los elementos hijos */
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 1200px; /* Límite máximo para pantallas grandes */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    padding-top: 40px; /* Espacio superior */
+    padding-bottom: 0; /* Sin padding inferior para que llegue al footer */
 }
 
+/* Sección Intro */
 .intro {
     display: flex;
     flex-wrap: wrap;
@@ -25,9 +30,12 @@ main.container {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-bottom: 4px;
+    margin-bottom: 20px; /* Reducido para mejor espaciado */
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    max-width: 100%; /* Asegura que no exceda */
 }
 
+/* Poster dentro de intro */
 .poster {
     flex: 1;
     text-align: center;
@@ -40,6 +48,7 @@ main.container {
     border-radius: 10px;
 }
 
+/* Texto de intro */
 .intro-text {
     flex: 2;
 }
@@ -59,6 +68,7 @@ main.container {
     color: #28a745;
 }
 
+/* Botón */
 .btn {
     display: inline-block;
     background-color: #007bff;
@@ -74,8 +84,10 @@ main.container {
     background-color: #0056b3;
 }
 
+/* Sección Proyectos */
 .projects {
     margin-bottom: 40px;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
 }
 
 .projects h2 {
@@ -89,8 +101,10 @@ main.container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
+    width: 100%; /* Asegura que ocupe el ancho disponible */
 }
 
+/* Tarjetas de proyecto */
 .project-card {
     background-color: #ffffff; /* Blanco */
     border-radius: 10px;
@@ -124,12 +138,13 @@ main.container {
 /* Sección Hero */
 .hero {
     position: relative;
-    background-color: #ffffff; /* Verde muy claro */
+    background-color: #ffffff; /* Blanco */
     padding: 60px 20px;
     text-align: center;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 40px;
+    width: 100%;/
 }
 
 .hero-img {
@@ -150,13 +165,14 @@ main.container {
     margin-bottom: 30px;
 }
 
-/* Sección Contacto */
+/* Sección Contacto (si se usa) */
 .contact {
     background-color: #ffffff; /* Blanco */
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 100%; /* Ocupa todo el ancho del contenedor */
 }
 
 .contact h2 {
@@ -170,11 +186,18 @@ main.container {
     color: #666;
 }
 
+
 /* Responsive */
 @media (max-width: 768px) {
+    .container {
+        padding-top: 20px; /* Reducido en móviles */
+        width: 95%; /* Más ancho en móviles para aprovechar espacio */
+    }
+    
     .intro {
         flex-direction: column;
         text-align: center;
+        padding: 20px; /* Reducido en móviles */
     }
     
     .poster {
@@ -188,5 +211,9 @@ main.container {
     
     .projects-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .hero {
+        padding: 40px 15px; /* Reducido en móviles */
     }
 }
