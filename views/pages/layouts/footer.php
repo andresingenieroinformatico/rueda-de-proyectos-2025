@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/footer.css">
+
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-section">

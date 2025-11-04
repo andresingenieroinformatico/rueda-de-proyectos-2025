@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rueda de Proyectos</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/home.css">
+
 </head>
 <body>
     <?php include __DIR__ . '/layouts/header.php'; ?>
@@ -27,7 +28,7 @@
             <h2>Proyectos destacados de ruedas de proyectos pasadas</h2>
             <div class="projects-grid">
                 <article class="project-card">
-                    <img src="assets/img/proyectos/proyecto1.jpg" alt="Miniatura proyecto 1">
+                    <img src="assets/img/sexta_rueda.jpg" alt="Miniatura proyecto 1">
                     <h3>Sexta rueda de proyectos</h3>
                     <p>Breve descripción del proyecto 1.</p>
                 </article>
@@ -43,14 +44,16 @@
             </div>
         </section>
 
-                <div class="hero">
+        <div class="hero">
             <div class="hero-content">
                 <h1>Novena Rueda de Proyectos</h1>
                 <p>Presenta tus ideas, mejora tu proyecto y conéctate con la comunidad.</p>
                 <a href="<?= BASE_URL ?>?controller=home&action=seleccionar_semestre" class="btn">Inscribete Ahora</a>
             </div>
         </div>
+
+        <?php include __DIR__ . '/layouts/footer.php'; ?>
     </main>
-    <?php include __DIR__ . '/layouts/footer.php'; ?>
+    
 </body>
 </html>
