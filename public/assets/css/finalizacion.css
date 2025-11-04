@@ -1,9 +1,10 @@
-/* finalizacion.css  */
+/* finalizacion.css */
 body {
     margin: 0;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #2d3740;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif; /* Sans-serif para legibilidad moderna */
+    background-color: #ffffff; /* Blanco institucional como fondo principal */
+    color: #333333; /* Texto oscuro para contraste */
+    line-height: 1.6; /* Mejora legibilidad */
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
@@ -11,50 +12,51 @@ body {
     display: flex;
     justify-content: center;
     padding: 2rem;
+    min-height: 100vh; /* Layout estructurado */
 }
 
 /* --- SECCIÓN PRINCIPAL --- */
 .final-section {
-    background: white;
-    padding: 4rem 3rem;
-    margin: 3rem auto;
-    max-width: 600px;
+    background: #ffffff; /* Blanco puro para limpieza */
+    padding: 3rem 2.5rem;
+    margin: 2rem auto;
+    max-width: 700px;
     width: 100%;
-    border-radius: 15px;
+    border-radius: 8px; /* Bordes sutiles */
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border-top: 8px solid #4CAF50;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    border-top: 5px solid #28a745; /* Verde institucional como borde superior para acento */
 }
 
 /* --- TÍTULO --- */
 .final-title {
-    color: #0d6efd;
-    font-size: 2.5rem;
+    color: #007bff; /* Azul institucional para el título */
+    font-size: 2.2rem;
     margin-bottom: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 /* --- TEXTO --- */
 .final-text {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     margin-bottom: 1.5rem;
-    color: #495057;
+    color: #555555; /* Gris para texto secundario */
 }
 
 /* --- IMAGEN --- */
 .final-image-container {
-    margin: 2.5rem 0;
-    background: linear-gradient(90deg, #0d6efd 0%, #4CAF50 100%);
-    padding: 1.5rem;
-    border-radius: 12px;
+    margin: 2rem 0;
+    background: #e3f2fd; /* Azul muy claro (institucional) para fondo, mejora visibilidad de texto blanco */
+    padding: 1rem;
+    border-radius: 6px;
     display: inline-block;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sombra mínima */
 }
 
 .final-image {
     max-width: 100%;
     height: auto;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)); /* resalta letras blancas */
+    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.7)); /* Mejorado: sombra más fuerte para resaltar letras blancas sin fondo */
 }
 
 /* --- BOTONES --- */
@@ -64,123 +66,28 @@ body {
 
 .btn-primary {
     display: inline-block;
-    background-color: #0d6efd;
-    color: white;
-    padding: 0.9rem 2rem;
-    border-radius: 10px;
+    background-color: #007bff; /* Azul institucional */
+    color: #ffffff;
+    padding: 0.8rem 1.8rem;
+    border-radius: 6px;
     text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    box-shadow: none; /* Minimalista */
 }
 
 .btn-primary:hover {
-    background-color: #4CAF50;
-    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
-    transform: translateY(-2px);
+    background-color: #28a745; /* Verde institucional en hover para acento */
 }
 
 /* --- FOOTER (opcional) --- */
 .site-footer {
-    background-color: #e9ecef;
+    background-color: #f8f9fa; /* Gris claro para pie, manteniendo blanco dominante */
     text-align: center;
-    padding: 1.2rem;
-    font-size: 0.95rem;
-    color: #6c757d;
-    border-top: 1px solid #dee2e6;
-    margin-top: 4rem;
-}
-/* finalizacion.css  */
-body {
-    margin: 0;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif;
-    background-color: #f8f9fa;
-    color: #2d3740;
-}
-
-/* --- CONTENEDOR PRINCIPAL --- */
-.final-container {
-    display: flex;
-    justify-content: center;
-    padding: 2rem;
-}
-
-/* --- SECCIÓN PRINCIPAL --- */
-.final-section {
-    background: white;
-    padding: 4rem 3rem;
-    margin: 3rem auto;
-    max-width: 600px;
-    width: 100%;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-    border-top: 8px solid #4CAF50;
-}
-
-/* --- TÍTULO --- */
-.final-title {
-    color: #0d6efd;
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    font-weight: 700;
-}
-
-/* --- TEXTO --- */
-.final-text {
-    font-size: 1.15rem;
-    margin-bottom: 1.5rem;
-    color: #495057;
-}
-
-/* --- IMAGEN --- */
-.final-image-container {
-    margin: 2.5rem 0;
-    background: linear-gradient(90deg, #0d6efd 0%, #4CAF50 100%);
-    padding: 1.5rem;
-    border-radius: 12px;
-    display: inline-block;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
-}
-
-.final-image {
-    max-width: 100%;
-    height: auto;
-    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5)); /* resalta letras blancas */
-}
-
-/* --- BOTONES --- */
-.final-buttons {
-    margin-top: 2rem;
-}
-
-.btn-primary {
-    display: inline-block;
-    background-color: #0d6efd;
-    color: white;
-    padding: 0.9rem 2rem;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-}
-
-.btn-primary:hover {
-    background-color: #4CAF50;
-    box-shadow: 0 6px 15px rgba(76, 175, 80, 0.4);
-    transform: translateY(-2px);
-}
-
-/* --- FOOTER (opcional) --- */
-.site-footer {
-    background-color: #e9ecef;
-    text-align: center;
-    padding: 1.2rem;
-    font-size: 0.95rem;
-    color: #6c757d;
-    border-top: 1px solid #dee2e6;
-    margin-top: 4rem;
+    padding: 1rem;
+    font-size: 0.9rem;
+    color: #777777;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 3rem;
 }

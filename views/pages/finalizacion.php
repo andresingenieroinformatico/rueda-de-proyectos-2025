@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalización de Inscripción - Rueda de Proyectos</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/finalizacion.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>assets/css/finalizacion.css?v=<?= time() ?>">
 </head>
 <body>
     <main class="final-container">
