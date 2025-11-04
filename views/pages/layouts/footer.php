@@ -27,9 +27,9 @@
         <div class="footer-section">
             <h3>Síguenos</h3>
             <div class="social-links">
-                <a href="#" class="social-link">Facebook</a>
-                <a href="#" class="social-link">Twitter</a>
-                <a href="#" class="social-link">Instagram</a>
+                <a href="https://www.facebook.com/share/14Mmfia5sk9/" class="social-link">Facebook</a>
+                <a href="https://www.instagram.com/ingenieria_informatica_unipaz?igsh=MTNuemdnM2JxeGpsZQ==" class="social-link">Instagram</a>
+                <a href="https://linkedin.com/unipaz" class="social-link">LinkedIn</a>
             </div>
         </div>
     </div>

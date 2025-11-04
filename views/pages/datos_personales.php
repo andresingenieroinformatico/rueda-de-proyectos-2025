@@ -5,28 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción - Rueda de Proyectos</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/datos_personales.css">
-    <style>
-        .student-block { 
-            border: 1px solid #ccc; 
-            padding: 15px; 
-            margin: 10px 0; 
-            border-radius: 10px;
-            display: none;
-        }
-        .form-group { margin-bottom: 10px; }
-        label { display: block; font-weight: bold; }
-        input, select { width: 100%; padding: 6px; }
-        .btn-submit {
-            margin-top: 15px;
-            padding: 10px 15px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .btn-submit:hover { background-color: #0056b3; }
-    </style>
 </head>
 <body>
 <div class="container">

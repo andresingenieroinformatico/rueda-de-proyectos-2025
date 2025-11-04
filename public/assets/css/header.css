@@ -6,34 +6,55 @@
 }
 
 body {
-    background-color: #f0f8ff; /* Cambié a #f0f8ff para que coincida con home.css y evite conflictos */
+    background-color: #f0f8ff;
     color: #333;
 }
 
+/* ======= HEADER ======= */
 header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #002b5c;
+    justify-content: space-between;  /* Logo + título a la izquierda, botón a la derecha */
+    align-items: center;              /* Centra verticalmente todo */
+    background-color: #002b5c;        /* Azul institucional */
     color: #fff;
-    padding: 1rem 2rem;
+    padding: 0.8rem 2rem;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     position: sticky;
     top: 0;
     z-index: 1000;
+    height: 80px;                     /* Un poco más alto para balancear el logo */
 }
 
+/* Contenedor logo + título */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 🔹 Aumenté el espacio entre imagen y texto */
+}
+
+/* Imagen del logo */
+.logo {
+    width: 65px;          /* 🔹 Aumenté tamaño del logo */
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* Título */
 header h2 {
-    font-size: 1.6rem;
-    letter-spacing: 0.5px;
+    font-size: 1.8rem;    /* Un poco más grande */
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    white-space: nowrap;
 }
 
+/* ======= NAV (Botón de iniciar sesión) ======= */
 nav a {
     color: #fff;
     text-decoration: none;
     font-weight: 500;
     background-color: #0063cd;
-    padding: 0.6rem 1rem;
+    padding: 0.7rem 1.2rem;
     border-radius: 8px;
     transition: all 0.3s ease;
 }
@@ -42,17 +63,31 @@ nav a:hover {
     background-color: #0056b3;
 }
 
-/* Eliminé los estilos de 'main' porque causaban el conflicto de espacios laterales/inferiores */
-
+/* ======= RESPONSIVE ======= */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
-        gap: 0.8rem;
+        height: auto;
+        padding: 1rem;
         text-align: center;
+        gap: 10px;
+    }
+
+    .logo-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .logo {
+        width: 70px;
+        height: auto;
+    }
+
+    header h2 {
+        font-size: 1.4rem;
     }
 
     nav a {
-        display: inline-block;
-        padding: 0.5rem 0.8rem;
+        padding: 0.5rem 0.9rem;
     }
 }

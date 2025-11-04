@@ -88,6 +88,27 @@
     transform: translateY(-2px);
 }
 
+.social-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    background-color: #28a745;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.social-link1:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
 .footer-bottom {
     width: 100%;
     text-align: center;

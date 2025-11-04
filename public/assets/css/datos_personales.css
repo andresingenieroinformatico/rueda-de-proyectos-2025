@@ -120,11 +120,23 @@ input:focus, select:focus {
     background: linear-gradient(135deg, #4CAF50, #0d6efd);
 }
 
-/* --- FOOTER --- */
-footer {
-    text-align: center;
-    margin-top: 4rem;
-    color: #6c757d;
-    border-top: 1px solid #e9ecef;
-    padding-top: 1rem;
-}
+        .student-block { 
+            border: 1px solid #ccc; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 10px;
+            display: none;
+        }
+        .form-group { margin-bottom: 10px; }
+        label { display: block; font-weight: bold; }
+        input, select { width: 100%; padding: 6px; }
+        .btn-submit {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn-submit:hover { background-color: #0056b3; }
