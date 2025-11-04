@@ -5,8 +5,7 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/../config/config.php';
 
-// Controlador y acción desde la URL
-$controller = $_GET['controller'] ?? 'home';  // <-- Por defecto 'home'
+$controller = $_GET['controller'] ?? 'home'; 
 $action = $_GET['action'] ?? 'index';
 
 // Normalizar nombres
