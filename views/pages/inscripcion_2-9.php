@@ -8,19 +8,6 @@
 </head>
 <body>
 
-<?php
-session_start();
-
-if (isset($_SESSION['semestre'])) {
-    $semestre = $_SESSION['semestre'];
-    echo "<p>Semestre seleccionado: $semestre</p>";
-} else {
-
-    header("Location: seleccionar_semestre.php");
-    exit();
-}
-?>
-
 <?php if (!empty($mensaje_resultado)) echo $mensaje_resultado; ?>
 
 <div class="container">
@@ -31,8 +18,6 @@ if (isset($_SESSION['semestre'])) {
     <?php require_once __DIR__ . '/../../config/config.php'; ?>
 
     <form action="<?= BASE_URL ?>?controller=home&action=inscripcion_1" method="POST">
-        <input type="hidden" name="semestre" value="1" />
-
         <fieldset>
             <legend>Datos del Proyecto</legend>
             <h3>Línea a la que Pertenece</h3>
