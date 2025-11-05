@@ -161,15 +161,43 @@ public function datos_personales()
                     "feedback" => $_POST["feedback"] ?? '',
                     "semestre" => $semestre
                 ];
-                $response = $supabase->insert('datos_proyectos', $dataProyecto);
-                if (empty($response) || !isset($response[0]['id_proyect'])) {
-                    throw new Exception("No se pudo crear el registro del proyecto.");
+
+                // Debug: Loguear los datos del proyecto si DEBUG está activo
+                if (DEBUG) {
+                    error_log("Datos del proyecto a insertar: " . print_r($dataProyecto, true));
                 }
+
+                $response = $supabase->insert('datos_proyectos', $dataProyecto);
+                
+                // Debug: Loguear la respuesta si DEBUG está activo
+                if (DEBUG) {
+                    error_log("Respuesta de Supabase: " . print_r($response, true));
+                }
+                
+                if (empty($response) || !isset($response[0]['id_proyect'])) {
+                    throw new Exception("No se pudo crear el registro del proyecto. Respuesta inválida de Supabase.");
+                }
+                
                 $id_proyect = $response[0]['id_proyect'];
+                
+                // Debug: Loguear éxito si DEBUG está activo
+                if (DEBUG) {
+                    error_log("Proyecto guardado exitosamente. ID: " . $id_proyect);
+                }
+                
+                $_SESSION['success'] = "Proyecto guardado exitosamente";
                 header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
                 exit;
             } catch (Exception $e) {
-                echo "Error al registrar el proyecto: " . $e->getMessage();
+                // Debug: Loguear el error si DEBUG está activo
+                if (DEBUG) {
+                    error_log("Error en inscripcion_2: " . $e->getMessage());
+                    error_log("Stack trace: " . $e->getTraceAsString());
+                }
+                
+                $_SESSION['error'] = "Error al procesar el formulario: " . $e->getMessage();
+                header("Location: index.php?controller=home&action=inscripcion_2");
+                exit;
             }
         } else {
             $this->view('inscripcion_2-9');

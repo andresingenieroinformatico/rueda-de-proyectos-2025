@@ -157,7 +157,7 @@
 
             <div class="form-group">
                 <h3 for="feedback">Feedback (Link de la Encuesta en Google Forms):</h3>
-                <textarea type="text" id="feedback" name="feedback" placeholder="Agregue su formulario de Google Forms" required></textarea>
+                <textarea id="feedback" name="feedback" placeholder="Agregue su formulario de Google Forms" required></textarea>
             </div>
         </fieldset>
 
