@@ -1,13 +1,16 @@
-# Usa imagen base de PHP con Apache
+# Imagen base con PHP y Apache
 FROM php:8.2-apache
-
-# Copia los archivos del proyecto al contenedor
-COPY . /var/www/html/
 
 # Instala extensiones necesarias
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Cambia el puerto de Apache al asignado por Render
+# Copia todo el proyecto al contenedor
+COPY . /var/www/html/
+
+# Cambia el directorio raíz de Apache a la carpeta "public"
+RUN sed -i 's|/var/www/html|/var/www/html/public|g' /etc/apache2/sites-available/000-default.conf /etc/apache2/apache2.conf
+
+# Configura el puerto que Render usa
 ENV PORT=10000
 RUN sed -i "s/80/${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
 
