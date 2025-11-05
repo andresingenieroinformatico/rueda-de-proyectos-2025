@@ -14,7 +14,7 @@ class HomeController
 
     public function index()
     {
-        $this->view('home');
+        $this->view('seleccionar_semestre');
     }
 
     public function seleccionar_semestre()

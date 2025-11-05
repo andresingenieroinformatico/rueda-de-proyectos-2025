@@ -1,93 +1,117 @@
-/* finalizacion.css */
+/* --- ESTILOS GENERALES --- */
 body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: linear-gradient(135deg, #eaf3fa 0%, #cde1f7 50%, #b1d0f0 100%);
+    color: #333;
     margin: 0;
-    font-family: "Segoe UI", Roboto, Arial, sans-serif; /* Sans-serif para legibilidad moderna */
-    background-color: #ffffff; /* Blanco institucional como fondo principal */
-    color: #333333; /* Texto oscuro para contraste */
-    line-height: 1.6; /* Mejora legibilidad */
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 /* --- CONTENEDOR PRINCIPAL --- */
 .final-container {
     display: flex;
     justify-content: center;
-    padding: 2rem;
-    min-height: 100vh; /* Layout estructurado */
+    align-items: center;
+    width: 100%;
 }
 
 /* --- SECCIÓN PRINCIPAL --- */
 .final-section {
-    background: #ffffff; /* Blanco puro para limpieza */
-    padding: 3rem 2.5rem;
-    margin: 2rem auto;
-    max-width: 700px;
-    width: 100%;
-    border-radius: 8px; /* Bordes sutiles */
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 50px 60px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    border-top: 5px solid #28a745; /* Verde institucional como borde superior para acento */
+    max-width: 700px;
+    width: 90%;
+    transition: all 0.3s ease;
 }
 
-/* --- TÍTULO --- */
+/* --- ENCABEZADO --- */
 .final-title {
-    color: #007bff; /* Azul institucional para el título */
-    font-size: 2.2rem;
-    margin-bottom: 1.5rem;
-    font-weight: 600;
+    color: #004b85;
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 25px;
 }
 
 /* --- TEXTO --- */
 .final-text {
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-    color: #555555; /* Gris para texto secundario */
+    font-size: 1.1em;
+    color: #444;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.final-text strong {
+    color: #004b85;
 }
 
 /* --- IMAGEN --- */
 .final-image-container {
-    margin: 2rem 0;
-    background: #e3f2fd; /* Azul muy claro (institucional) para fondo, mejora visibilidad de texto blanco */
-    padding: 1rem;
-    border-radius: 6px;
-    display: inline-block;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sombra mínima */
+    margin: 35px 0 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .final-image {
-    max-width: 100%;
-    height: auto;
-    filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.7)); /* Mejorado: sombra más fuerte para resaltar letras blancas sin fondo */
+    height: 130px;
+    width: auto;
+    filter: drop-shadow(1px 1px 3px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
 }
 
-/* --- BOTONES --- */
+.final-image:hover {
+    transform: scale(1.05);
+}
+
+/* --- BOTÓN --- */
 .final-buttons {
-    margin-top: 2rem;
+    margin-top: 30px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 28px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1em;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
-    display: inline-block;
-    background-color: #007bff; /* Azul institucional */
-    color: #ffffff;
-    padding: 0.8rem 1.8rem;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-    box-shadow: none; /* Minimalista */
+    background-color: #11a52c;
+    color: #fff;
+    border: 2px solid #11a52c;
 }
 
 .btn-primary:hover {
-    background-color: #28a745; /* Verde institucional en hover para acento */
+    background-color: #0e8f27;
+    border-color: #0e8f27;
+    box-shadow: 0 4px 12px rgba(17, 165, 44, 0.4);
 }
 
-/* --- FOOTER (opcional) --- */
-.site-footer {
-    background-color: #f8f9fa; /* Gris claro para pie, manteniendo blanco dominante */
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.9rem;
-    color: #777777;
-    border-top: 1px solid #e0e0e0;
-    margin-top: 3rem;
+/* --- SOMBRA AL PASAR EL MOUSE SOBRE LA TARJETA --- */
+.final-section:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* --- RESPONSIVIDAD --- */
+@media (max-width: 768px) {
+    .final-section {
+        padding: 30px 25px;
+    }
+    .final-title {
+        font-size: 1.7em;
+    }
+    .final-image {
+        height: 100px;
+    }
 }

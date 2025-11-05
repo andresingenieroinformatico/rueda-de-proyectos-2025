@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finalización de Inscripción - Rueda de Proyectos</title>
-<link rel="stylesheet" href="<?= BASE_URL ?>assets/css/finalizacion.css">
+<link rel="stylesheet" href="<?= BASE_URL ?>assets/css/finalizacion.css?v=<?= time() ?>">
 </head>
 <body>
     <main class="final-container">
@@ -17,11 +17,6 @@
             <p class="final-text">
                 Pronto nos pondremos en contacto contigo con más detalles sobre el evento.
             </p>
-
-            <div class="final-image-container">
-                <img src="<?= BASE_URL ?>assets/img/Unipaz-Avanza.png" alt="Rueda de Proyectos - Evento" class="final-image">
-            </div>
-
             <div class="final-buttons">
                 <a href="<?= BASE_URL ?>index.php" class="btn btn-primary">
                     Volver al Inicio

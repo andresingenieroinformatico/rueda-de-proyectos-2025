@@ -1,20 +1,20 @@
 <?php
-// seleccionar_semestre.php
-
-
+session_start(); // No importa si no hay login, sirve solo para guardar temporalmente el semestre
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $semestre = intval($_POST['semestre']);
 
-    // Determinar a qué plantilla se dirige según el semestre
-    if ($semestre >= 1 && $semestre <= 3) {
-        // Formularios de primer ciclo
-        header("Location: index.php?controller=home&action=inscripcion_1&id_ponent=$id_ponent&semestre=$semestre");
-        exit();
-    } elseif ($semestre >= 4 && $semestre <= 9) {
-        // Formularios de segundo ciclo
-        header("Location: index.php?controller=home&action=inscripcion_2&id_ponent=$id_persona&semestre=$semestre");
-        exit();
+    if ($semestre >= 1 && $semestre <= 9) {
+        // Guardar el semestre en una sesión temporal
+        $_SESSION['semestre'] = $semestre;
+
+        if ($semestre == 1) {
+            header("Location: index.php?controller=home&action=inscripcion_1");
+            exit();
+        } elseif ($semestre >= 2 && $semestre <= 9) {
+            header("Location: index.php?controller=home&action=inscripcion_2");
+            exit();
+        }
     } else {
         $error = "Por favor selecciona un semestre válido (1 a 9).";
     }

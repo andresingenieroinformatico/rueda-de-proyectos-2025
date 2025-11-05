@@ -1,155 +1,363 @@
-/* Reset básico y tipografía */
-* {
-    box-sizing: border-box;
-}
-
+/* Estilo General */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f0f8ff; /* suave azul claro */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f4f7f6;
     color: #333;
+    line-height: 1.6;
     margin: 0;
     padding: 20px;
-    min-height: 100vh;
 }
 
-/* Contenedor principal */
 .container {
     max-width: 900px;
-    background: #fff;
-    margin: 0 auto 40px;
-    padding: 30px 40px;
-    border-radius: 12px;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    align-content: center;
 }
 
-/* Títulos */
-h1 {
-    text-align: center;
-    color: #007bff;
-    margin-bottom: 30px;
-    font-size: 2.5em;
-}
-
-h2 {
-    margin-top: 40px;
-    margin-bottom: 20px;
-    color: #28a745;
-    font-size: 1.8em;
-    border-bottom: 2px solid #28a745;
-    padding-bottom: 6px;
-}
-
-/* Formulario */
-form {
+.header-container {
+    display: flex;
+    align-items: center; /* Alineación vertical centrada */
+    justify-content: center; /* Centra horizontalmente */
+    gap: 10px; /* Espacio entre imagen y título */
     width: 100%;
 }
 
-/* Grupo de campos */
-.form-group {
-    margin-bottom: 25px;
+.final-image {
+    height: 100px; /* Ajusta el tamaño de la imagen según lo que necesites */
+    width: auto; /* Mantiene proporción */
 }
 
-/* Etiquetas */
-label {
-    display: block;
-    font-weight: bold;
+
+h1 {
+    color: #005a9c;
+    text-align: center;
     margin-bottom: 10px;
-    color: #007bff;
+    align-items: center;
+    align-self: center;
+}
+
+p {
+    text-align: center;
+    margin-bottom: 25px;
     font-size: 1.1em;
 }
 
-/* Radio buttons en línea o en bloque */
-.linea-radio input[type="radio"],
-.form-group input[type="radio"] {
-    margin-right: 8px;
+/* Estilo de Formulario */
+fieldset {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+}
+
+legend {
+    font-size: 1.5em;
+    font-weight: 600;
+    color: #005a9c;
+    padding: 0 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.form-group-inline .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1em;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 14px;
+    border-left: 4px solid transparent;
+    padding-left: 14px;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
     cursor: pointer;
-    vertical-align: middle;
+    user-select: none;
 }
 
-.linea-radio {
-    margin-left: 15px;
-    line-height: 1.8;
+.radio-option input[type="radio"] {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--verde);
+    cursor: pointer;
+    transition: transform 0.15s ease;
 }
 
-/* Textareas */
+.radio-option input[type="radio"]:hover {
+    transform: scale(1.2);
+}
+
+.radio-option input[type="radio"]:checked + label {
+    font-weight: 700;
+    color: var(--verde);
+}
+
+.radio-option input[type="radio"]:checked ~ .description {
+    color: var(--verde-claro);
+    font-weight: 600;
+}
+
+.radio-option:hover {
+    background-color: #c4fdc9;
+    border-left-color: var(--verde-claro);
+}
+
+/* El label va después del input, para que se active al clickear */
+.radio-option label {
+    cursor: pointer;
+    flex: 0 0 240px;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="url"],
+select,
 textarea {
     width: 100%;
-    min-height: 80px;
-    padding: 10px 15px;
-    border: 1.8px solid #ccc;
-    border-radius: 8px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Importante para que el padding no afecte el ancho */
     font-size: 1em;
+    font-family: inherit;
+}
+
+textarea {
     resize: vertical;
-    transition: border-color 0.3s;
-    font-family: inherit;
 }
 
-textarea:focus {
-    border-color: #007bff;
-    outline: none;
+.description {
+    font-size: 0.85em;
+    color: #666;
+    font-style: italic;
+    margin-left: 20px;
+    margin-bottom: 10px;
 }
 
-/* Input tipo texto */
-input[type="text"] {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 1em;
-    border: 1.8px solid #ccc;
-    border-radius: 8px;
-    transition: border-color 0.3s;
-    font-family: inherit;
+/* Estilo para radios */
+.group input[type="radio"] {
+    margin-right: 8px;
 }
 
-input[type="text"]:focus {
-    border-color: #007bff;
-    outline: none;
+.radio-group label {
+    font-weight: 500;
+    margin-right: 20px;
 }
 
-/* Botón submit */
+/* Grid para estudiantes */
+.student-grid {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 1fr;
+    gap: 10px 15px;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.student-grid label {
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.student-grid label:first-child {
+    font-weight: 600;
+}
+
+/* Botón de envío */
 .submit-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 14px 30px;
-    font-size: 1.2em;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
     display: block;
-    margin: 30px auto 0;
-    transition: background-color 0.3s;
+    width: 20%;
+    padding: 15px;
+    padding-left: 5px;
+    margin-left: 40%;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
-    background-color: #218838;
+    background-color: #0056b3;
 }
 
-/* Responsive */
+/* Mensajes de Error de JS */
+#error-messages {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #c62828;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    display: none; /* Oculto por defecto */
+}
+
+#error-messages ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* Responsividad */
 @media (max-width: 768px) {
-    body {
-        padding: 15px;
+    .student-grid {
+        grid-template-columns: 1fr;
     }
+    .student-grid label {
+        /* Ocultar etiquetas de la cabecera en móvil */
+        display: none; 
+    }
+    .student-grid label:first-child {
+        /* Mostrar la etiqueta "Estudiante X" */
+        display: block; 
+        margin-top: 15px;
+    }
+    .form-group-inline {
+        flex-direction: column;
+        gap: 0;
+    }
+}
 
-    .container {
-        padding: 25px 20px;
-        margin-bottom: 30px;
-    }
+/* --- Estilo 1: Tarjetas en Cuadrícula (Para "Línea") --- */
 
-    h1 {
-        font-size: 2em;
-    }
+.radio-group-cards {
+    display: grid;
+    /* Cuadrícula responsiva: intenta columnas de 200px, si no caben, se ajustan */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-top: 1px;
+}
 
-    h2 {
-        font-size: 1.5em;
-    }
+/* Ocultamos el botón de radio real */
+.radio-group-cards input[type="radio"] {
+    display: none;
+}
 
-    textarea, input[type="text"] {
-        font-size: 0.95em;
-    }
+/* Estilo de la tarjeta (el label) */
+.radio-group-cards .radio-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    font-weight: 500;
+    min-height: 60px;
+}
 
-    .submit-btn {
-        width: 100%;
-        font-size: 1.1em;
-        padding: 12px;
-    }
+/* Efecto al pasar el mouse */
+.radio-group-cards .radio-card:hover {
+    border-color: #11a52c;
+    background-color: #f4faff;
+    transform: translateY(-3px);
+}
+
+/* Estado seleccionado (cuando el input está :checked) */
+.radio-group-cards input[type="radio"]:checked + .radio-card {
+    background-color: #005a9c;
+    color: #ffffff;
+    border-color: #005a9c;
+    box-shadow: 0 4px 12px rgba(0, 90, 156, 0.3);
+    transform: translateY(-5px);
+}
+
+.radio-group-cards .radio-card strong {
+    font-weight: 600;
+}
+
+
+/* --- Estilo 2: Tarjetas Verticales (Para "Fase de avance") --- */
+
+.radio-group-vertical {
+    display: flex;
+    flex-direction: column; /* Apila las tarjetas verticalmente */
+    gap: 10px; /* Espacio entre tarjetas */
+    margin-top: 10px;
+}
+
+/* Ocultamos el botón de radio real */
+.radio-group-vertical input[type="radio"] {
+    display: none;
+}
+
+/* Estilo de la tarjeta detallada (el label) */
+.radio-group-vertical .radio-card-detailed {
+    display: block; /* Para que ocupe todo el ancho */
+    padding: 15px 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Estilo para el título dentro de la tarjeta */
+.radio-card-detailed .card-title {
+    display: block;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #005a9c; /* Color principal */
+}
+
+.radio-card-detailed input[type="radio"]:checked + .radio-card-detailed {
+    border-color: #005a9c;
+    background-color: #e6f0f7; /* Un fondo azul muy claro */
+    box-shadow: 0 4px 10px rgba(0, 90, 156, 0.2);
+}
+/* Estilo para la descripción dentro de la tarjeta */
+.radio-card-detailed .card-description {
+    display: block;
+    font-size: 0.9em;
+    color: #555;
+    margin-top: 5px;
+}
+
+/* Efecto al pasar el mouse */
+.radio-group-vertical .radio-card-detailed:hover {
+    border-color: #11a52c;
+    background-color: #f4faff;
+}
+
+/* Estado seleccionado (cuando el input está :checked) */
+.radio-group-vertical input[type="radio"]:checked + .radio-card-detailed {
+    border-color: #005a9c;
+    background-color: #e6f0f7; /* Un fondo azul muy claro */
+    box-shadow: 0 4px 10px rgba(0, 90, 156, 0.2);
+}
+
+/* Hacemos el título más oscuro cuando está seleccionado */
+.radio-group-vertical input[type="radio"]:checked + .radio-card-detailed .card-title {
+    color: #004070;
 }
