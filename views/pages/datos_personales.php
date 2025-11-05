@@ -78,7 +78,7 @@
                         <label for="semestre<?= $i ?>">Semestre:</label>
                         <select id="semestre<?= $i ?>" name="semestre<?= $i ?>">
                             <option value="">Seleccione</option>
-                            <?php for ($s = 1; $s <= 10; $s++): ?>
+                            <?php for ($s = 1; $s <= 9; $s++): ?>
                                 <option value="<?= $s ?>">Semestre <?= $s ?></option>
                             <?php endfor; ?>
                         </select>
