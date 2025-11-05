@@ -1,0 +1,7 @@
+# Archivos de entorno y configuración
+.env
+# Otros archivos del sistema
+/.controllers/
+/.models
+/.htaccess
+/database/

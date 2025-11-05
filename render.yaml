@@ -9,7 +9,16 @@ services:
         sync: false
       - key: SUPABASE_KEY
         sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: DEBUG
+        value: false
+      - key: ADMIN_USER
+        sync: false
+      - key: ADMIN_PASS
+        sync: false
     healthCheckPath: /
     healthCheckInterval: 5
-    buildCommand: ""
-    startCommand: ""
+    healthCheckTimeout: 5
