@@ -101,6 +101,7 @@ public function datos_personales()
                     "feedback" => $_POST["feedback"] ?? '',
                     "semestre" => 1
                 ];
+
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
 
                 if (empty($response) || !isset($response[0]['id_proyect'])) {
@@ -145,11 +146,16 @@ public function datos_personales()
                     "feedback" => $_POST["feedback"] ?? '',
                     "semestre" => 2
                 ];
+
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
+
+
                 if (empty($response) || !isset($response[0]['id_proyect'])) {
                     throw new Exception("No se pudo crear el registro del proyecto.");
                 }
+
                 $id_proyect = $response[0]['id_proyect'];
+
                 header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
                 exit;
             } catch (Exception $e) {
