@@ -9,14 +9,12 @@
 <body>
 
 <?php if (!empty($mensaje_resultado)) echo $mensaje_resultado; ?>
-
 <div class="container">
     <div class="header-container">
         <img src="<?= BASE_URL ?>assets/img/SISINFO3.png" alt="sisinfo" class="final-image">
         <h1>Ficha de Inscripción</h1>
     </div>
     <?php require_once __DIR__ . '/../../config/config.php'; ?>
-
     <form action="<?= BASE_URL ?>?controller=home&action=inscripcion_1" method="POST">
         <fieldset>
             <legend>Datos del Proyecto</legend>
