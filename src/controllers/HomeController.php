@@ -128,7 +128,7 @@ public function datos_personales()
             try {
                 $dataProyecto = [
                     "linea" => $_POST["linea"] ?? '',
-                    "fase" =>'Propuesta',
+                    "fase" =>$_POST["fase"] ?? '',
                     "enfoque" => $_POST["enfoque"] ?? '',
                     "asignaturas" => $_POST["asignaturas"] ?? '',
                     "aportes" => $_POST["aportes"] ?? '',
