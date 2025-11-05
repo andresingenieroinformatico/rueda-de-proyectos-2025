@@ -101,15 +101,11 @@ public function datos_personales()
                     "feedback" => $_POST["feedback"] ?? '',
                     "semestre" => 1
                 ];
-
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
-
                 if (empty($response) || !isset($response[0]['id_proyect'])) {
                     throw new Exception("No se pudo crear el registro del proyecto.");
                 }
-
                 $id_proyect = $response[0]['id_proyect'];
-
                 header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
                 exit;
             } catch (Exception $e) {
@@ -126,9 +122,28 @@ public function datos_personales()
             $supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_KEY);
 
             try {
+                // Debug: Loguear los datos recibidos si DEBUG está activo
+                if (DEBUG) {
+                    error_log("POST data recibida en inscripcion_2: " . print_r($_POST, true));
+                }
+
+                // Validar y sanitizar los datos
+                $semestre = intval($_POST['semestre'] ?? 2);
+                if ($semestre < 2 || $semestre > 9) {
+                    throw new Exception("Semestre inválido: $semestre");
+                }
+
+                // Validar campos requeridos
+                $camposRequeridos = ['linea', 'fase', 'enfoque', 'titulo', 'introduccion'];
+                foreach ($camposRequeridos as $campo) {
+                    if (empty($_POST[$campo])) {
+                        throw new Exception("El campo '$campo' es requerido");
+                    }
+                }
+
                 $dataProyecto = [
                     "linea" => $_POST["linea"] ?? '',
-                    "fase" =>$_POST["fase"] ?? '',
+                    "fase" => $_POST["fase"] ?? '',
                     "enfoque" => $_POST["enfoque"] ?? '',
                     "asignaturas" => $_POST["asignaturas"] ?? '',
                     "aportes" => $_POST["aportes"] ?? '',
@@ -144,17 +159,13 @@ public function datos_personales()
                     "conclusiones" => $_POST["conclusiones"] ?? '',
                     "bibliografia" => $_POST["bibliografia"] ?? '',
                     "feedback" => $_POST["feedback"] ?? '',
-                    "semestre" => 2
+                    "semestre" => $semestre
                 ];
-
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
-
                 if (empty($response) || !isset($response[0]['id_proyect'])) {
                     throw new Exception("No se pudo crear el registro del proyecto.");
                 }
-
                 $id_proyect = $response[0]['id_proyect'];
-
                 header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
                 exit;
             } catch (Exception $e) {
