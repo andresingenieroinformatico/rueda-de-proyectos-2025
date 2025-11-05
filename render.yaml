@@ -4,19 +4,10 @@ services:
     env: docker
     plan: free
 
-    # Puerto en el que escucha Apache dentro del contenedor
     envVars:
       - key: PORT
         value: 80
-
-    # Opcional: si quieres pasar variables del .env de Supabase
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_KEY
         sync: false
-
-    # Render usará este Dockerfile para construir
-    buildCommand: docker build -t rueda-de-proyectos .
-
-    # Render ejecutará automáticamente el CMD del Dockerfile
-    startCommand: apache2-foreground
