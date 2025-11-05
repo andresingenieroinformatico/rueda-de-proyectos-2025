@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: rueda-proyectos
+    env: docker
+    plan: free
+    region: oregon
+    buildCommand: ""
+    startCommand: apache2-foreground
+    dockerfilePath: ./Dockerfile
