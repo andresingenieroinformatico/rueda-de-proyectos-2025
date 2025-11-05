@@ -16,7 +16,6 @@
     </div>
     <?php require_once __DIR__ . '/../../config/config.php'; ?>
     <form action="<?= BASE_URL ?>?controller=home&action=inscripcion_2" method="POST">
-        <input type="hidden" name="semestre" value="2" />
         <fieldset>
             <legend>Datos del Proyecto</legend>
             <h3>Línea a la que Pertenece</h3>
