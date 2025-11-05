@@ -43,8 +43,8 @@ $baseFolder = $baseFolder === '/' ? '' : $baseFolder;
 define('BASE_URL', $protocol . $host . $baseFolder . '/');
 
 // Admin credentials
-define('ADMIN_USER', get_env('ADMIN_USER', 'admin@example.com'));
-define('ADMIN_PASS', get_env('ADMIN_PASS', 'changeme'));
+define('ADMIN_USER', get_env('ADMIN_USER', 'mehandhesgithub@gmail.com'));
+define('ADMIN_PASS', get_env('ADMIN_PASS', '123456789'));
 
 // Validación básica de configuración de Supabase
 if (empty(SUPABASE_URL) || empty(SUPABASE_KEY)) {
