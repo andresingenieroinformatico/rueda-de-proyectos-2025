@@ -33,7 +33,7 @@ if (
     $https = true;
 }
 
-$protocol = $https ? 'https://' : 'http://';
+$protocol = 'https://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $baseFolder = dirname($_SERVER['SCRIPT_NAME']);
 $baseFolder = $baseFolder === '/' ? '' : $baseFolder;
