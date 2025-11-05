@@ -15,7 +15,7 @@
         <h1>Ficha de Inscripción</h1>
     </div>
     <?php require_once __DIR__ . '/../../config/config.php'; ?>
-    <form action="<?= BASE_URL ?>?controller=home&action=inscripcion_1" method="POST">
+    <form action="<?= BASE_URL ?>?controller=home&action=inscripcion_2" method="POST">
         <fieldset>
             <legend>Datos del Proyecto</legend>
             <h3>Línea a la que Pertenece</h3>
