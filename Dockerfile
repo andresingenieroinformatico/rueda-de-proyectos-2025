@@ -1,24 +1,17 @@
-# 1. Imagen base de PHP con Apache
+# Usa imagen base de PHP con Apache
 FROM php:8.2-apache
 
-# 2. Instalar extensiones necesarias (mysqli, pdo, etc.)
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-# 3. Copiar todo el contenido del proyecto
+# Copia los archivos del proyecto al contenedor
 COPY . /var/www/html/
 
-# 4. Establecer el directorio raíz en la carpeta "public"
-WORKDIR /var/www/html/public
+# Instala extensiones necesarias
+RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# 5. Habilitar mod_rewrite (si usas rutas amigables)
-RUN a2enmod rewrite
+# Cambia el puerto de Apache al asignado por Render
+ENV PORT=10000
+RUN sed -i "s/80/${PORT}/g" /etc/apache2/ports.conf /etc/apache2/sites-available/000-default.conf
 
-# 6. Configurar permisos
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+EXPOSE 10000
 
-# 7. Exponer el puerto 80
-EXPOSE 80
-
-# 8. Iniciar Apache
+# Inicia Apache
 CMD ["apache2-foreground"]
