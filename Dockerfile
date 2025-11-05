@@ -2,9 +2,6 @@ FROM php:8.2-apache
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Copiar primero la plantilla de configuración
-COPY config/config.php /var/www/html/config/config.php
-
 # Copiar el resto de archivos
 COPY . /var/www/html/
 
