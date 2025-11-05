@@ -11,4 +11,6 @@ services:
       - key: SUPABASE_KEY
         sync: false
     dockerfilePath: ./Dockerfile
-    buildCommand: docker build -t rueda-de-proyectos .
+  # Para servicios 'env: docker' Render construye la imagen automáticamente
+  # No ejecutes 'docker build' en buildCommand (no está permitido en el entorno de Render).
+  # Si necesitas pasos previos a la build, indícalos aquí (por ejemplo 'composer install') o colócalos en el Dockerfile.
