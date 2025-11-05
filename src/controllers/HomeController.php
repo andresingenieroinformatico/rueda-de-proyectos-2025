@@ -102,10 +102,13 @@ public function datos_personales()
                     "semestre" => 1
                 ];
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
+
                 if (empty($response) || !isset($response[0]['id_proyect'])) {
                     throw new Exception("No se pudo crear el registro del proyecto.");
                 }
+
                 $id_proyect = $response[0]['id_proyect'];
+
                 header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
                 exit;
             } catch (Exception $e) {
@@ -122,28 +125,9 @@ public function datos_personales()
             $supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_KEY);
 
             try {
-                // Debug: Loguear los datos recibidos si DEBUG está activo
-                if (DEBUG) {
-                    error_log("POST data recibida en inscripcion_2: " . print_r($_POST, true));
-                }
-
-                // Validar y sanitizar los datos
-                $semestre = intval($_POST['semestre'] ?? 2);
-                if ($semestre < 2 || $semestre > 9) {
-                    throw new Exception("Semestre inválido: $semestre");
-                }
-
-                // Validar campos requeridos
-                $camposRequeridos = ['linea', 'fase', 'enfoque', 'titulo', 'introduccion'];
-                foreach ($camposRequeridos as $campo) {
-                    if (empty($_POST[$campo])) {
-                        throw new Exception("El campo '$campo' es requerido");
-                    }
-                }
-
                 $dataProyecto = [
                     "linea" => $_POST["linea"] ?? '',
-                    "fase" => $_POST["fase"] ?? '',
+                    "fase" =>$_POST["fase"] ?? '',
                     "enfoque" => $_POST["enfoque"] ?? '',
                     "asignaturas" => $_POST["asignaturas"] ?? '',
                     "aportes" => $_POST["aportes"] ?? '',
@@ -159,45 +143,17 @@ public function datos_personales()
                     "conclusiones" => $_POST["conclusiones"] ?? '',
                     "bibliografia" => $_POST["bibliografia"] ?? '',
                     "feedback" => $_POST["feedback"] ?? '',
-                    "semestre" => $semestre
+                    "semestre" => 2
                 ];
-
-                // Debug: Loguear los datos del proyecto si DEBUG está activo
-                if (DEBUG) {
-                    error_log("Datos del proyecto a insertar: " . print_r($dataProyecto, true));
-                }
-
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
-                
-                // Debug: Loguear la respuesta si DEBUG está activo
-                if (DEBUG) {
-                    error_log("Respuesta de Supabase: " . print_r($response, true));
-                }
-                
                 if (empty($response) || !isset($response[0]['id_proyect'])) {
-                    throw new Exception("No se pudo crear el registro del proyecto. Respuesta inválida de Supabase.");
+                    throw new Exception("No se pudo crear el registro del proyecto.");
                 }
-                
                 $id_proyect = $response[0]['id_proyect'];
-                
-                // Debug: Loguear éxito si DEBUG está activo
-                if (DEBUG) {
-                    error_log("Proyecto guardado exitosamente. ID: " . $id_proyect);
-                }
-                
-                $_SESSION['success'] = "Proyecto guardado exitosamente";
                 header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
                 exit;
             } catch (Exception $e) {
-                // Debug: Loguear el error si DEBUG está activo
-                if (DEBUG) {
-                    error_log("Error en inscripcion_2: " . $e->getMessage());
-                    error_log("Stack trace: " . $e->getTraceAsString());
-                }
-                
-                $_SESSION['error'] = "Error al procesar el formulario: " . $e->getMessage();
-                header("Location: index.php?controller=home&action=inscripcion_2");
-                exit;
+                echo "Error al registrar el proyecto: " . $e->getMessage();
             }
         } else {
             $this->view('inscripcion_2-9');
