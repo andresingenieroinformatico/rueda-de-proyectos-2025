@@ -144,7 +144,7 @@ public function datos_personales()
                     "conclusiones" => $_POST["conclusiones"] ?? '',
                     "bibliografia" => $_POST["bibliografia"] ?? '',
                     "feedback" => $_POST["feedback"] ?? '',
-                    "semestre" => $_POST["semestre"] ?? 2 
+                    "semestre" => 2
                 ];
 
                 $response = $supabase->insert('datos_proyectos', $dataProyecto);
