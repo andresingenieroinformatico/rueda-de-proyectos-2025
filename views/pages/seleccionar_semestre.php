@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Seleccionar Semestre</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/seleccionar_semestre.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>assets/css/seleccionar_semestre.css?v=123">
 </head>
 <body>
     <div class="container">
