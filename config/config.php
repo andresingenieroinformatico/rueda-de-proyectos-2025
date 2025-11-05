@@ -24,12 +24,21 @@ define('SUPABASE_KEY', get_env('SUPABASE_KEY', SUPABASE_SERVICE_KEY ?: SUPABASE_
 // Debug mode
 define('DEBUG', filter_var(get_env('DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN));
 
-// URL Base - Detecta automáticamente en producción
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https://' : 'http://';
+$https = false;
+if (
+    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ||
+    (isset($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] === 'on')
+) {
+    $https = true;
+}
+
+$protocol = $https ? 'https://' : 'http://';
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $baseFolder = dirname($_SERVER['SCRIPT_NAME']);
 $baseFolder = $baseFolder === '/' ? '' : $baseFolder;
 define('BASE_URL', $protocol . $host . $baseFolder . '/');
+
 
 // Admin credentials
 define('ADMIN_USER', get_env('ADMIN_USER', 'admin@example.com'));
