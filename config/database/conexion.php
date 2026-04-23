@@ -3,219 +3,84 @@
 
 require_once __DIR__ . '/../../config/config.php';
 
-class SupabaseClient
+function parse_database_url(string $databaseUrl): array
 {
-    private $url;
-    private $key;
-
-    public function __construct($url, $key)
-    {
-        $this->url = rtrim(trim((string) $url), '/');
-        $this->key = trim((string) $key);
+    $databaseUrl = trim($databaseUrl);
+    if ($databaseUrl === '') {
+        throw new RuntimeException('DATABASE_URL/SUPABASE_DB_URL esta vacia.');
     }
 
-    public function from($table)
-    {
-        return new SupabaseTable($this->url, $this->key, $table);
+    $parsed = parse_url($databaseUrl);
+    if ($parsed === false) {
+        throw new RuntimeException('DATABASE_URL/SUPABASE_DB_URL no tiene un formato valido.');
     }
+
+    $scheme = strtolower((string) ($parsed['scheme'] ?? ''));
+    if (!in_array($scheme, ['postgres', 'postgresql', 'pgsql'], true)) {
+        throw new RuntimeException('DATABASE_URL/SUPABASE_DB_URL debe usar un esquema postgres/postgresql.');
+    }
+
+    parse_str((string) ($parsed['query'] ?? ''), $query);
+
+    return [
+        'driver' => 'pgsql',
+        'host' => (string) ($parsed['host'] ?? ''),
+        'port' => (string) ($parsed['port'] ?? '5432'),
+        'dbname' => ltrim((string) ($parsed['path'] ?? ''), '/'),
+        'user' => isset($parsed['user']) ? rawurldecode((string) $parsed['user']) : '',
+        'pass' => isset($parsed['pass']) ? rawurldecode((string) $parsed['pass']) : '',
+        'sslmode' => trim((string) ($query['sslmode'] ?? SUPABASE_DB_SSLMODE)),
+    ];
 }
 
-class SupabaseTable
+function has_supabase_pdo_credentials(): bool
 {
-    private $baseUrl;
-    private $key;
-    private $table;
-    private $query = [];
-
-    public function __construct($baseUrl, $key, $table)
-    {
-        $this->baseUrl = rtrim((string) $baseUrl, '/');
-        $this->key = (string) $key;
-        $this->table = (string) $table;
-    }
-
-    public function select($columns = '*')
-    {
-        $this->query['select'] = $columns;
-        return $this;
-    }
-
-    public function eq($column, $value)
-    {
-        $this->query['filters'][] = $column . '=eq.' . rawurlencode((string) $value);
-        return $this;
-    }
-
-    public function order($column, $ascending = false)
-    {
-        $this->query['order'] = $column . '.' . ($ascending ? 'asc' : 'desc');
-        return $this;
-    }
-
-    public function execute()
-    {
-        if (!function_exists('curl_init')) {
-            throw new RuntimeException('La extension cURL no esta disponible en PHP.');
-        }
-
-        $url = $this->baseUrl . '/rest/v1/' . $this->table;
-        $params = [];
-
-        if (!empty($this->query['select'])) {
-            $select = str_replace(' ', '', (string) $this->query['select']);
-            $params[] = 'select=' . rawurlencode($select);
-        }
-
-        if (!empty($this->query['filters'])) {
-            foreach ($this->query['filters'] as $filter) {
-                $params[] = $filter;
-            }
-        }
-
-        if (!empty($this->query['order'])) {
-            $params[] = 'order=' . rawurlencode((string) $this->query['order']);
-        }
-
-        if (!empty($params)) {
-            $url .= '?' . implode('&', $params);
-        }
-
-        if (DEBUG) {
-            error_log('URL Supabase: ' . $url);
-        }
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'apikey: ' . SUPABASE_KEY,
-            'Authorization: Bearer ' . SUPABASE_KEY,
-            'Content-Type: application/json',
-            'Prefer: return=representation',
-        ]);
-
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $error = curl_error($ch);
-        curl_close($ch);
-
-        if ($error) {
-            throw new Exception('cURL Error: ' . $error . ' | URL: ' . $url);
-        }
-
-        if ($httpCode >= 400) {
-            $decoded = json_decode((string) $response, true);
-            $message = $decoded['message'] ?? ('HTTP ' . $httpCode);
-            throw new Exception('Supabase Error: ' . $message . ' | URL: ' . $url);
-        }
-
-        return json_decode((string) $response, true) ?: [];
-    }
+    return SUPABASE_PDO_CONFIGURED;
 }
 
-function supabase()
+function get_supabase_pdo_config(): array
 {
-    static $client = null;
-    static $initialized = false;
+    static $config = null;
 
-    if ($initialized) {
-        return $client;
+    if ($config !== null) {
+        return $config;
     }
 
-    $initialized = true;
-
-    if (!function_exists('should_use_supabase') || !should_use_supabase()) {
-        if (DEBUG) {
-            error_log('Supabase deshabilitado. DATA_DRIVER=' . DATA_DRIVER);
-        }
-        return null;
+    if (SUPABASE_DB_URL !== '') {
+        $config = parse_database_url(SUPABASE_DB_URL);
+        return $config;
     }
 
-    if (!SUPABASE_CONFIGURED) {
-        error_log('Supabase no esta configurado correctamente.');
-        return null;
-    }
+    $config = [
+        'driver' => 'pgsql',
+        'host' => SUPABASE_DB_HOST,
+        'port' => SUPABASE_DB_PORT,
+        'dbname' => SUPABASE_DB_NAME,
+        'user' => SUPABASE_DB_USER,
+        'pass' => SUPABASE_DB_PASS,
+        'sslmode' => SUPABASE_DB_SSLMODE,
+    ];
 
-    $client = new SupabaseClient(SUPABASE_URL, SUPABASE_KEY);
-
-    if (DEBUG) {
-        error_log('Conectado a Supabase: ' . SUPABASE_URL);
-    }
-
-    return $client;
+    return $config;
 }
 
-/**
- * Obtiene una conexión a la base de datos
- * Intenta PDO (PostgreSQL/Supabase) primero, luego MySQL como respaldo
- * @return PDO
- */
-function db(): PDO
+function build_supabase_pgsql_dsn(array $config): string
 {
-    static $pdo = null;
-    static $initialized = false;
+    $parts = [
+        'host=' . $config['host'],
+        'port=' . $config['port'],
+        'dbname=' . $config['dbname'],
+    ];
 
-    if ($initialized) {
-        return $pdo;
+    if (!empty($config['sslmode'])) {
+        $parts[] = 'sslmode=' . $config['sslmode'];
     }
 
-    $initialized = true;
+    return 'pgsql:' . implode(';', $parts);
+}
 
-    // Intentar primero con PDO (PostgreSQL/Supabase)
-    if (function_exists('should_use_pdo') && should_use_pdo()) {
-        try {
-            // Usar DATABASE_URL si está disponible (formato: postgres://user:password@host:port/database)
-            $dsn = '';
-            $username = DB_USER;
-            $password = DB_PASSWORD;
-            
-            if (defined('DATABASE_URL') && DATABASE_URL !== '') {
-                // Parsear DATABASE_URL
-                $url = parse_url(DATABASE_URL);
-                $host = $url['host'] ?? DB_HOST;
-                $port = $url['port'] ?? DB_PORT;
-                $dbname = ltrim($url['path'] ?? '', '/') ?: DB_NAME;
-                $username = $url['user'] ?? DB_USER;
-                $password = $url['pass'] ?? DB_PASSWORD;
-                
-                $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', $host, $port, $dbname);
-            } else {
-                // Usar configuración individual
-                $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', DB_HOST, DB_PORT, DB_NAME);
-            }
-
-            $options = [
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES => false,
-            ];
-
-            $pdo = new PDO($dsn, $username, $password, $options);
-
-            if (DEBUG) {
-                error_log('Conectado a PostgreSQL via PDO: ' . DB_HOST);
-            }
-
-            return $pdo;
-        } catch (PDOException $e) {
-            error_log('Error de conexión PDO (Supabase): ' . $e->getMessage());
-            // Continuar al fallback de MySQL
-        }
-    }
-
-    // Fallback: usar MySQL si está disponible
-    if (function_exists('get_db_connection')) {
-        try {
-            $pdo = get_db_connection();
-            if (DEBUG) {
-                error_log('Usando conexión MySQL como fallback');
-            }
-            return $pdo;
-        } catch (PDOException $e) {
-            error_log('Error de conexión MySQL: ' . $e->getMessage());
-        }
-    }
-
-    // Si nada funciona, lanzar excepción
-    throw new RuntimeException('No se pudo establecer conexión a la base de datos.');
+function describe_supabase_pgsql_target(?array $config = null): string
+{
+    $config = $config ?? get_supabase_pdo_config();
+    return ($config['host'] ?: '(sin host)') . ':' . ($config['port'] ?: '(sin puerto)') . '/' . ($config['dbname'] ?: '(sin db)');
 }

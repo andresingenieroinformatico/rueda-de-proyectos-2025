@@ -60,49 +60,50 @@ function detect_app_env(): string
 define('APP_ENV', detect_app_env());
 define('DEBUG', filter_var(get_env('DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN));
 
-// Configuracion de Supabase
+// Configuracion de Supabase REST (se mantiene por compatibilidad)
 define('SUPABASE_URL', trim(get_env('SUPABASE_URL', '')));
 define('SUPABASE_ANON_KEY', trim(get_env('SUPABASE_ANON_KEY', '')));
 define('SUPABASE_SERVICE_KEY', trim(get_env('SUPABASE_SERVICE_KEY', '')));
 define('SUPABASE_KEY', trim(get_env('SUPABASE_KEY', SUPABASE_SERVICE_KEY ?: SUPABASE_ANON_KEY)));
+define('SUPABASE_API_CONFIGURED', is_valid_supabase_url(SUPABASE_URL) && SUPABASE_KEY !== '');
+
+// Configuracion PDO para PostgreSQL de Supabase
+define('SUPABASE_DB_URL', trim(get_env('SUPABASE_DB_URL', get_env('DATABASE_URL', ''))));
+define('SUPABASE_DB_HOST', trim(get_env('SUPABASE_DB_HOST', get_env('PGHOST', ''))));
+define('SUPABASE_DB_PORT', trim(get_env('SUPABASE_DB_PORT', get_env('PGPORT', '5432'))));
+define('SUPABASE_DB_NAME', trim(get_env('SUPABASE_DB_NAME', get_env('PGDATABASE', 'postgres'))));
+define('SUPABASE_DB_USER', trim(get_env('SUPABASE_DB_USER', get_env('PGUSER', ''))));
+define('SUPABASE_DB_PASS', trim(get_env('SUPABASE_DB_PASS', get_env('PGPASSWORD', ''))));
+define('SUPABASE_DB_SSLMODE', trim(get_env('SUPABASE_DB_SSLMODE', 'require')));
+
 define(
     'SUPABASE_ENV_PRESENT',
-    SUPABASE_URL !== '' || SUPABASE_ANON_KEY !== '' || SUPABASE_SERVICE_KEY !== '' || SUPABASE_KEY !== ''
+    SUPABASE_API_CONFIGURED ||
+    SUPABASE_DB_URL !== '' ||
+    SUPABASE_DB_HOST !== '' ||
+    SUPABASE_DB_USER !== '' ||
+    SUPABASE_DB_PASS !== '' ||
+    SUPABASE_URL !== '' ||
+    SUPABASE_KEY !== ''
 );
-define('SUPABASE_CONFIGURED', is_valid_supabase_url(SUPABASE_URL) && SUPABASE_KEY !== '');
 
-// Permite forzar el backend con DATA_DRIVER=supabase, pdo, o mysql
-define('DATA_DRIVER', strtolower(get_env('DATA_DRIVER', (SUPABASE_CONFIGURED || SUPABASE_ENV_PRESENT) ? 'supabase' : 'mysql')));
+define(
+    'SUPABASE_PDO_CONFIGURED',
+    SUPABASE_DB_URL !== '' ||
+    (
+        SUPABASE_DB_HOST !== '' &&
+        SUPABASE_DB_NAME !== '' &&
+        SUPABASE_DB_USER !== '' &&
+        SUPABASE_DB_PASS !== ''
+    )
+);
+
+// Permite forzar el backend con DATA_DRIVER=supabase o DATA_DRIVER=mysql
+define('DATA_DRIVER', strtolower(get_env('DATA_DRIVER', SUPABASE_ENV_PRESENT ? 'supabase' : 'mysql')));
 
 function should_use_supabase(): bool
 {
-    return DATA_DRIVER === 'supabase' && SUPABASE_CONFIGURED;
-}
-
-// Configuración de PDO para PostgreSQL de Supabase
-// Soporta tanto variables individuales como DATABASE_URL de Supabase
-define('DATABASE_URL', get_env('DATABASE_URL', ''));
-define('DB_HOST', get_env('DB_HOST', ''));
-define('DB_PORT', get_env('DB_PORT', '5432'));
-define('DB_NAME', get_env('DB_NAME', 'postgres'));
-define('DB_USER', get_env('DB_USER', 'postgres'));
-define('DB_PASSWORD', get_env('DB_PASSWORD', ''));
-
-// Verificar si PDO está disponible
-define('PDO_AVAILABLE', extension_loaded('pdo') && extension_loaded('pdo_pgsql'));
-
-function should_use_pdo(): bool
-{
-    // Usar PDO si DATA_DRIVER=pdo Y hay configuración de base de datos
-    if (DATA_DRIVER !== 'pdo') {
-        return false;
-    }
-    
-    // Verificar si hay DATABASE_URL o configuración individual
-    $hasDatabaseUrl = DATABASE_URL !== '';
-    $hasIndividualConfig = DB_HOST !== '' && DB_USER !== '';
-    
-    return PDO_AVAILABLE && ($hasDatabaseUrl || $hasIndividualConfig);
+    return DATA_DRIVER === 'supabase';
 }
 
 // Deteccion mejorada del protocolo HTTPS para definir BASE_URL
@@ -123,6 +124,10 @@ $baseFolder = $baseFolder === '/' ? '' : $baseFolder;
 
 define('BASE_URL', $protocol . $host . $baseFolder . '/');
 
-if (DEBUG && DATA_DRIVER === 'supabase' && !SUPABASE_CONFIGURED) {
-    error_log('Supabase no esta configurado correctamente. Revisa SUPABASE_URL y SUPABASE_KEY/SERVICE_KEY.');
+if (DEBUG && should_use_supabase() && !SUPABASE_PDO_CONFIGURED) {
+    error_log(
+        'Supabase esta seleccionado como backend, pero faltan credenciales PDO. ' .
+        'Define SUPABASE_DB_URL o SUPABASE_DB_HOST, SUPABASE_DB_PORT, SUPABASE_DB_NAME, ' .
+        'SUPABASE_DB_USER y SUPABASE_DB_PASS.'
+    );
 }
