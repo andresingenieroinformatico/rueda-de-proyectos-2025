@@ -20,7 +20,16 @@ function is_valid_supabase_url($url): bool
 {
     $url = trim((string) $url);
 
-    return $url !== '' && $url !== 'https://lomxtxtdjqxcrpujwqxn.supabase.co';
+    if ($url === '') {
+        return false;
+    }
+
+    if (!filter_var($url, FILTER_VALIDATE_URL)) {
+        return false;
+    }
+
+    $host = parse_url($url, PHP_URL_HOST);
+    return is_string($host) && $host !== '';
 }
 
 // Configuracion de entorno
