@@ -5,10 +5,27 @@ set -e
 : "${PORT:=80}"
 
 # Modificar configuración de Apache en tiempo de ejecución para escuchar en $PORT
-# Intentamos reemplazar las ocurrencias más comunes
-sed -i "s/Listen 80/Listen ${PORT}/g" /etc/apache2/ports.conf || true
-sed -i "s/<VirtualHost \*:80>/<VirtualHost *:${PORT}>/g" /etc/apache2/sites-available/000-default.conf || true
-sed -i "s/:80>/:${PORT}>/g" /etc/apache2/sites-available/000-default.conf || true
+# Intentamos reemplazar las ocurrencias más comunes. Reemplazamos cualquier 'Listen' y VirtualHost por seguridad.
+echo "[INFO] Using PORT=${PORT}" >&2
+
+# ports.conf: reemplazar cualquier línea Listen por la que provee la plataforma
+if grep -qE "^\s*Listen\s+" /etc/apache2/ports.conf 2>/dev/null; then
+	sed -ri "s/^\s*Listen\s+.*/Listen ${PORT}/" /etc/apache2/ports.conf || true
+else
+	echo "Listen ${PORT}" >> /etc/apache2/ports.conf
+fi
+
+# Actualizar VirtualHost en sites-available y sites-enabled para usar el PORT
+for f in /etc/apache2/sites-available/*.conf /etc/apache2/sites-enabled/*.conf; do
+	[ -e "$f" ] || continue
+	sed -ri "s@<VirtualHost \*:[0-9]+>@<VirtualHost *:${PORT}>@g" "$f" || true
+	sed -ri "s@:\\d+>@:${PORT}>@g" "$f" || true
+done
+
+# Asegurar ServerName global para evitar warnings y binding ambiguo
+if ! grep -q "^ServerName" /etc/apache2/apache2.conf 2>/dev/null; then
+	echo "ServerName localhost" >> /etc/apache2/apache2.conf || true
+fi
 
 # Asegurar un único MPM en tiempo de arranque (previene "More than one MPM loaded").
 # Preferimos `mpm_prefork` para compatibilidad con mod_php.
