@@ -32,8 +32,32 @@ function is_valid_supabase_url($url): bool
     return is_string($host) && $host !== '';
 }
 
+function detect_app_env(): string
+{
+    $explicitEnv = strtolower(trim((string) get_env('APP_ENV', '')));
+    if ($explicitEnv !== '') {
+        return $explicitEnv;
+    }
+
+    $railwaySignals = [
+        getenv('RAILWAY_ENVIRONMENT'),
+        getenv('RAILWAY_ENVIRONMENT_NAME'),
+        getenv('RAILWAY_PROJECT_ID'),
+        getenv('RAILWAY_SERVICE_ID'),
+        getenv('RAILWAY_PUBLIC_DOMAIN'),
+    ];
+
+    foreach ($railwaySignals as $signal) {
+        if (!empty($signal)) {
+            return 'production';
+        }
+    }
+
+    return 'local';
+}
+
 // Configuracion de entorno
-define('APP_ENV', strtolower(get_env('APP_ENV', getenv('RENDER') ? 'production' : 'local')));
+define('APP_ENV', detect_app_env());
 define('DEBUG', filter_var(get_env('DEBUG', 'false'), FILTER_VALIDATE_BOOLEAN));
 
 // Configuracion de Supabase
