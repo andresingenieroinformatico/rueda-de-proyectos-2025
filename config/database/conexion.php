@@ -54,6 +54,10 @@ class SupabaseTable
 
     public function execute()
     {
+        if (!function_exists('curl_init')) {
+            throw new RuntimeException('La extension cURL no esta disponible en PHP.');
+        }
+
         $url = $this->baseUrl . '/rest/v1/' . $this->table;
         $params = [];
 

@@ -17,6 +17,10 @@ class PonenteModel
 
     private function supabaseRequest(string $method, string $path, ?array $payload = null, array $extraHeaders = []): array
     {
+        if (!function_exists('curl_init')) {
+            throw new RuntimeException('La extension cURL no esta disponible en PHP.');
+        }
+
         $url = rtrim(SUPABASE_URL, '/') . $path;
 
         $headers = array_merge([

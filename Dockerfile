@@ -1,7 +1,11 @@
 FROM php:8.2-apache
 
 # Instala extensiones PHP necesarias
-RUN docker-php-ext-install mysqli pdo pdo_mysql
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libcurl4-openssl-dev \
+    && docker-php-ext-install curl mysqli pdo pdo_mysql \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Habilita mod_rewrite para poder usar .htaccess
 RUN a2enmod rewrite
