@@ -57,6 +57,19 @@ p {
     font-size: 1.05em;
 }
 
+.server-message {
+    margin: 0 0 20px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.server-message-error {
+    background-color: #fdecea;
+    border: 1px solid #f3b7b2;
+    color: #9b1c1c;
+}
+
 /* Semestre seleccionado */
 .info-semestre {
     text-align: center;

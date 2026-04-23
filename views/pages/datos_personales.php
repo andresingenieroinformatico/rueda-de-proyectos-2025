@@ -15,6 +15,7 @@
     </div>
 
     <p>Por favor completa los siguientes datos para registrar a los participantes del proyecto.</p>
+    <?php if (!empty($mensaje_resultado)) echo $mensaje_resultado; ?>
 
     <?php // Ahora este formulario registra los ponentes primero. Al enviar, se generará un token de sesión y se redirigirá para completar los datos del proyecto. ?>
 

@@ -49,6 +49,19 @@ p {
     font-size: 1.1em;
 }
 
+.server-message {
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.server-message-error {
+    background-color: #ffebee;
+    color: #c62828;
+    border: 1px solid #ef9a9a;
+}
+
 /* Estilo de Formulario */
 fieldset {
     border: 1px solid #ddd;
