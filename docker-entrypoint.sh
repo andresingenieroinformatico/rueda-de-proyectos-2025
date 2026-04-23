@@ -40,6 +40,17 @@ grep -R "LoadModule .*mpm_" /etc/apache2 2>&1 | sed -n '1,200p' >&2 || true
 echo "[DEBUG] apachectl -M output (buscar mpm):" >&2
 apachectl -M 2>&1 | sed -n '1,200p' >&2 || true
 
+echo "[DEBUG] /etc/apache2/ports.conf:" >&2
+sed -n '1,200p' /etc/apache2/ports.conf 2>&1 | sed -n '1,200p' >&2 || true
+echo "[DEBUG] /etc/apache2/sites-enabled/000-default.conf:" >&2
+sed -n '1,200p' /etc/apache2/sites-enabled/000-default.conf 2>&1 | sed -n '1,200p' >&2 || true
+
+echo "[DEBUG] Sockets TCP escuchando (ss -ltnp):" >&2
+ss -ltnp 2>&1 | sed -n '1,200p' >&2 || true
+echo "[DEBUG] fallback netstat -tulpn:" >&2
+netstat -tulpn 2>&1 | sed -n '1,200p' >&2 || true
+
+
 
 # Ejecutar el comando por defecto (apache2-foreground)
 exec "$@"
