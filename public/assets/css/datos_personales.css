@@ -57,6 +57,18 @@ p {
     font-size: 1.05em;
 }
 
+/* Semestre seleccionado */
+.info-semestre {
+    text-align: center;
+    background: linear-gradient(90deg, rgba(0,90,156,0.08), rgba(17,165,44,0.03));
+    border: 1px solid rgba(0,90,156,0.08);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 700;
+    color: var(--azul-oscuro);
+    margin-bottom: 18px;
+}
+
 /* =========================
    FORMULARIO
 ========================= */
@@ -119,6 +131,10 @@ textarea:focus {
     flex-wrap: wrap;
 }
 
+.form-group-inline.small-gap {
+    gap: 12px;
+}
+
 .form-group-inline .form-group {
     flex: 1;
     min-width: 200px;
@@ -145,6 +161,21 @@ textarea:focus {
     color: var(--azul);
     margin-bottom: 15px;
     text-align: left;
+}
+
+.student-block .form-group-inline {
+    margin-top: 8px;
+}
+
+.legend-inline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.cantidad-select {
+    max-width: 220px;
 }
 
 /* =========================
