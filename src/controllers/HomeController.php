@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/database/conexion.php';
+require_once __DIR__ . '/../../config/database/mysql_conexion.php';
 
 class HomeController
 {
@@ -22,10 +23,10 @@ class HomeController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $semestre = intval($_POST['semestre'] ?? 0);
             if ($semestre === 1) {
-                header("Location: index.php?controller=home&action=inscripcion_1");
+                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_1");
                 exit();
             } elseif ($semestre >= 2 && $semestre <= 9) {
-                header("Location: index.php?controller=home&action=inscripcion_2");
+                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_2");
                 exit();
             } else {
                 echo "Por favor selecciona un semestre válido.";
@@ -36,83 +37,109 @@ class HomeController
     }
 
     // --- REGISTRO DE PONENTES ---
-public function datos_personales()
+    public function datos_personales()
 {
-    // PRIORIDAD: POST (envío) > GET (carga)
-    $id_proyect = $_POST['id_proyect'] ?? $_GET['id_proyect'] ?? null;
+    // Ahora el formulario registra los ponentes primero. Se genera un registration_token
+    // para agrupar la sesión y luego se redirige al formulario del proyecto.
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $docente = $_POST['docente'] ?? '';
+            $cantidad = intval($_POST['cantidad'] ?? 0);
 
-    if (!$id_proyect) {
-        die("Error: No se proporcionó el ID del proyecto. POST: " . print_r($_POST, true));
-    }
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $docente = $_POST['docente'] ?? '';
-        $cantidad = intval($_POST['cantidad'] ?? 0);
-        $supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_KEY);
-
-        try {
-            for ($i = 1; $i <= $cantidad; $i++) {
-                $data = [
-                    "docente" => $docente,
-                    "nombres" => $_POST["nombres{$i}"] ?? '',
-                    "apellidos" => $_POST["apellidos{$i}"] ?? '',
-                    "cedula" => $_POST["cedula{$i}"] ?? '',
-                    "telefono" => $_POST["telefono{$i}"] ?? '',
-                    "semestre" => $_POST["semestre{$i}"] ?? '',
-                    "jornada" => $_POST["jornada{$i}"] ?? '',
-                    "correo" => $_POST["correo{$i}"] ?? '',
-                    "id_proyect" => $id_proyect
-                ];
-
-                $supabase->insert('datos_ponentes', $data);
+            // Generar token único para la sesión de inscripción
+            try {
+                $token = bin2hex(random_bytes(16));
+            } catch (Exception $e) {
+                $token = uniqid('sess_', true);
             }
 
-            header("Location: index.php?controller=home&action=finalizacion");
-            exit;
-        } catch (Exception $e) {
-            echo "Error al registrar los ponentes: " . $e->getMessage();
+            $pdo = db();
+            try {
+                $pdo->beginTransaction();
+
+                $sql = "INSERT INTO datos_ponentes (docente, nombres, apellidos, cedula, telefono, semestre, jornada, correo, registration_token, id_proyect, created_at) VALUES (:docente, :nombres, :apellidos, :cedula, :telefono, :semestre, :jornada, :correo, :registration_token, NULL, NOW())";
+                $stmt = $pdo->prepare($sql);
+
+                for ($i = 1; $i <= $cantidad; $i++) {
+                    $params = [
+                        ':docente' => $docente,
+                        ':nombres' => $_POST["nombres{$i}"] ?? '',
+                        ':apellidos' => $_POST["apellidos{$i}"] ?? '',
+                        ':cedula' => $_POST["cedula{$i}"] ?? '',
+                        ':telefono' => $_POST["telefono{$i}"] ?? '',
+                        ':semestre' => $_POST["semestre{$i}"] ?? null,
+                        ':jornada' => $_POST["jornada{$i}"] ?? null,
+                        ':correo' => $_POST["correo{$i}"] ?? null,
+                        ':registration_token' => $token
+                    ];
+
+                    $stmt->execute($params);
+                }
+
+                $pdo->commit();
+
+                $next = $_GET['next'] ?? $_POST['next'] ?? 'inscripcion_1';
+                header("Location: index.php?controller=home&action={$next}&token={$token}");
+                exit;
+            } catch (Exception $e) {
+                if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
+                echo "Error al registrar los ponentes: " . $e->getMessage();
+            }
+        } else {
+            $this->view('datos_personales');
         }
-    } else {
-        $this->view('datos_personales');
-    }
 }
     public function inscripcion_1()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_KEY);
+            $registration_token = $_POST['registration_token'] ?? null;
 
+            $dataProyecto = [
+                "linea" => $_POST["linea"] ?? '',
+                "fase" => 'Propuesta',
+                "enfoque" => $_POST["enfoque"] ?? '',
+                "asignaturas" => $_POST["asignaturas"] ?? '',
+                "aportes" => $_POST["aportes"] ?? '',
+                "titulo" => $_POST["titulo"] ?? '',
+                "problema" => $_POST["problema"] ?? '',
+                "justificacion" => $_POST["justificacion"] ?? '',
+                "objetivog" => $_POST["objetivog"] ?? '',
+                "objetivoe" => $_POST["objetivoe"] ?? '',
+                "referentes" => $_POST["referentes"] ?? '',
+                "metodologia" => $_POST["metodologia"] ?? '',
+                "resultados" => $_POST["resultados"] ?? '',
+                "conclusiones" => $_POST["conclusiones"] ?? '',
+                "bibliografia" => $_POST["bibliografia"] ?? '',
+                "feedback" => $_POST["feedback"] ?? '',
+                "semestre" => 1
+            ];
+
+            $pdo = db();
             try {
-                $dataProyecto = [
-                    "linea" => $_POST["linea"] ?? '',
-                    "fase" =>'Propuesta',
-                    "enfoque" => $_POST["enfoque"] ?? '',
-                    "asignaturas" => $_POST["asignaturas"] ?? '',
-                    "aportes" => $_POST["aportes"] ?? '',
-                    "titulo" => $_POST["titulo"] ?? '',
-                    "problema" => $_POST["problema"] ?? '',
-                    "justificacion" => $_POST["justificacion"] ?? '',
-                    "objetivog" => $_POST["objetivog"] ?? '',
-                    "objetivoe" => $_POST["objetivoe"] ?? '',
-                    "referentes" => $_POST["referentes"] ?? '',
-                    "metodologia" => $_POST["metodologia"] ?? '',
-                    "resultados" => $_POST["resultados"] ?? '',
-                    "conclusiones" => $_POST["conclusiones"] ?? '',
-                    "bibliografia" => $_POST["bibliografia"] ?? '',
-                    "feedback" => $_POST["feedback"] ?? '',
-                    "semestre" => 1
-                ];
+                $pdo->beginTransaction();
 
-                $response = $supabase->insert('datos_proyectos', $dataProyecto);
+                // Insertar proyecto
+                $fields = array_keys($dataProyecto);
+                $placeholders = array_map(fn($f) => ':' . $f, $fields);
+                $sql = "INSERT INTO datos_proyectos (" . implode(',', $fields) . ") VALUES (" . implode(',', $placeholders) . ")";
+                $stmt = $pdo->prepare($sql);
+                $params = [];
+                foreach ($dataProyecto as $k => $v) $params[':' . $k] = $v;
+                $stmt->execute($params);
+                $id_proyect = (int)$pdo->lastInsertId();
 
-                if (empty($response) || !isset($response[0]['id_proyect'])) {
-                    throw new Exception("No se pudo crear el registro del proyecto.");
+                // Asignar ponentes si viene token
+                if ($registration_token) {
+                    $sqlUp = "UPDATE datos_ponentes SET id_proyect = :id_proyect WHERE registration_token = :token AND (id_proyect IS NULL OR id_proyect = '')";
+                    $stmt2 = $pdo->prepare($sqlUp);
+                    $stmt2->execute([':id_proyect' => $id_proyect, ':token' => $registration_token]);
                 }
 
-                $id_proyect = $response[0]['id_proyect'];
+                $pdo->commit();
 
-                header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
+                header("Location: index.php?controller=home&action=finalizacion");
                 exit;
             } catch (Exception $e) {
+                if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
                 echo "Error al registrar el proyecto: " . $e->getMessage();
             }
         } else {
@@ -123,42 +150,56 @@ public function datos_personales()
     public function inscripcion_2()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $supabase = new SupabaseClient(SUPABASE_URL, SUPABASE_KEY);
+            $registration_token = $_POST['registration_token'] ?? null;
 
+            $dataProyecto = [
+                "linea" => $_POST["linea"] ?? '',
+                "fase" => $_POST["fase"] ?? '',
+                "enfoque" => $_POST["enfoque"] ?? '',
+                "asignaturas" => $_POST["asignaturas"] ?? '',
+                "aportes" => $_POST["aportes"] ?? '',
+                "titulo" => $_POST["titulo"] ?? '',
+                "introduccion" => $_POST["introduccion"] ?? '',
+                "problema" => $_POST["problema"] ?? '',
+                "justificacion" => $_POST["justificacion"] ?? '',
+                "objetivog" => $_POST["objetivog"] ?? '',
+                "objetivoe" => $_POST["objetivoe"] ?? '',
+                "referentes" => $_POST["referentes"] ?? '',
+                "metodologia" => $_POST["metodologia"] ?? '',
+                "resultados" => $_POST["resultados"] ?? '',
+                "conclusiones" => $_POST["conclusiones"] ?? '',
+                "bibliografia" => $_POST["bibliografia"] ?? '',
+                "feedback" => $_POST["feedback"] ?? '',
+                "semestre" => 2
+            ];
+
+            $pdo = db();
             try {
-                $dataProyecto = [
-                    "linea" => $_POST["linea"] ?? '',
-                    "fase" =>$_POST["fase"] ?? '',
-                    "enfoque" => $_POST["enfoque"] ?? '',
-                    "asignaturas" => $_POST["asignaturas"] ?? '',
-                    "aportes" => $_POST["aportes"] ?? '',
-                    "titulo" => $_POST["titulo"] ?? '',
-                    "introduccion" => $_POST["introduccion"] ?? '',
-                    "problema" => $_POST["problema"] ?? '',
-                    "justificacion" => $_POST["justificacion"] ?? '',
-                    "objetivog" => $_POST["objetivog"] ?? '',
-                    "objetivoe" => $_POST["objetivoe"] ?? '',
-                    "referentes" => $_POST["referentes"] ?? '',
-                    "metodologia" => $_POST["metodologia"] ?? '',
-                    "resultados" => $_POST["resultados"] ?? '',
-                    "conclusiones" => $_POST["conclusiones"] ?? '',
-                    "bibliografia" => $_POST["bibliografia"] ?? '',
-                    "feedback" => $_POST["feedback"] ?? '',
-                    "semestre" => 2
-                ];
+                $pdo->beginTransaction();
 
-                $response = $supabase->insert('datos_proyectos', $dataProyecto);
+                // Insertar proyecto
+                $fields = array_keys($dataProyecto);
+                $placeholders = array_map(fn($f) => ':' . $f, $fields);
+                $sql = "INSERT INTO datos_proyectos (" . implode(',', $fields) . ") VALUES (" . implode(',', $placeholders) . ")";
+                $stmt = $pdo->prepare($sql);
+                $params = [];
+                foreach ($dataProyecto as $k => $v) $params[':' . $k] = $v;
+                $stmt->execute($params);
+                $id_proyect = (int)$pdo->lastInsertId();
 
-
-                if (empty($response) || !isset($response[0]['id_proyect'])) {
-                    throw new Exception("No se pudo crear el registro del proyecto.");
+                // Asignar ponentes si viene token
+                if ($registration_token) {
+                    $sqlUp = "UPDATE datos_ponentes SET id_proyect = :id_proyect WHERE registration_token = :token AND (id_proyect IS NULL OR id_proyect = '')";
+                    $stmt2 = $pdo->prepare($sqlUp);
+                    $stmt2->execute([':id_proyect' => $id_proyect, ':token' => $registration_token]);
                 }
 
-                $id_proyect = $response[0]['id_proyect'];
+                $pdo->commit();
 
-                header("Location: index.php?controller=home&action=datos_personales&id_proyect={$id_proyect}");
+                header("Location: index.php?controller=home&action=finalizacion");
                 exit;
             } catch (Exception $e) {
+                if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
                 echo "Error al registrar el proyecto: " . $e->getMessage();
             }
         } else {

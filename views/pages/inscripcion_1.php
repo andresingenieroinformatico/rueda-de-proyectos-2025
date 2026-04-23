@@ -17,7 +17,11 @@
     </div>
     <?php require_once __DIR__ . '/../../config/config.php'; ?>
 
+    <?php $registration_token = $_GET['token'] ?? null; ?>
     <form action="<?= BASE_URL ?>?controller=home&action=inscripcion_1" method="POST">
+        <?php if ($registration_token): ?>
+            <input type="hidden" name="registration_token" value="<?= htmlspecialchars($registration_token) ?>">
+        <?php endif; ?>
         <input type="hidden" name="semestre" value="1" />
 
         <fieldset>

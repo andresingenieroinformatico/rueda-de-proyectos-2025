@@ -1,115 +1,81 @@
 <?php
-// src/models/ProyectoModel.php
+// src/models/ProyectoModel.php — implementación PDO (MySQL)
 
-require_once __DIR__ . '/../../config/database/conexion.php';
+require_once __DIR__ . '/../../config/database/mysql_conexion.php';
 
 class ProyectoModel
 {
-    private $supabase;
+    private $pdo;
 
     public function __construct()
     {
-        $this->supabase = supabase(); // Usa la conexión global definida en conexion.php
+        $this->pdo = db();
     }
 
-    // 🔹 Obtener todos los proyectos
     public function getAll()
     {
-        $response = $this->supabase
-            ->from('datos_proyectos')
-            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introduccion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
-            ->execute();
-
-        return is_array($response) ? $response : [];
+        $sql = "SELECT id_proyect, linea, fase, enfoque, asignaturas, aportes, titulo, introduccion, problema, justificacion, objetivog, objetivoe, referentes, metodologia, resultados, conclusiones, bibliografia, feedback, semestre, created_at, updated_at FROM datos_proyectos ORDER BY id_proyect DESC";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll();
     }
 
-    // 🔹 Obtener proyecto por ID
     public function getById($id)
     {
-        $response = $this->supabase
-            ->from('datos_proyectos')
-            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introduccion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
-            ->eq('id_proyect', $id)
-            ->execute();
-
-        return (is_array($response) && !empty($response)) ? $response[0] : null;
+        $sql = "SELECT * FROM datos_proyectos WHERE id_proyect = :id LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch() ?: null;
     }
 
-    // 🔹 Obtener proyectos filtrados por semestre
     public function getBySemestre($semestre)
     {
-        $response = $this->supabase
-            ->from('datos_proyectos')
-            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introduccion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
-            ->eq('semestre', $semestre)
-            ->execute();
-
-        // ✅ Retornamos array seguro
-        return is_array($response) ? $response : [];
+        $sql = "SELECT * FROM datos_proyectos WHERE semestre = :semestre ORDER BY id_proyect DESC";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':semestre' => $semestre]);
+        return $stmt->fetchAll();
     }
 
-    // 🔹 Agregar nuevo proyecto
-    public function insert($data)
+    public function insert(array $data)
     {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, SUPABASE_URL . "/rest/v1/datos_proyectos");
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "apikey: " . SUPABASE_KEY,
-            "Authorization: Bearer " . SUPABASE_KEY,
-            "Content-Type: application/json",
-            "Prefer: return=representation"
-        ]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $fields = [];
+        $placeholders = [];
+        $params = [];
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        foreach ($data as $k => $v) {
+            $fields[] = $k;
+            $placeholders[] = ":{$k}";
+            $params[":{$k}"] = $v;
+        }
 
-        return ($httpCode === 201) ? json_decode($response, true) : false;
+        $sql = "INSERT INTO datos_proyectos (" . implode(',', $fields) . ") VALUES (" . implode(',', $placeholders) . ")";
+        $stmt = $this->pdo->prepare($sql);
+        $ok = $stmt->execute($params);
+
+        if ($ok) {
+            return (int)$this->pdo->lastInsertId();
+        }
+        return false;
     }
 
-    // 🔹 Actualizar proyecto existente
-    public function update($id, $data)
+    public function update($id, array $data)
     {
-        $ch = curl_init();
-        $url = SUPABASE_URL . "/rest/v1/datos_proyectos?id_proyect=eq.$id";
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PATCH");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "apikey: " . SUPABASE_KEY,
-            "Authorization: Bearer " . SUPABASE_KEY,
-            "Content-Type: application/json",
-            "Prefer: return=representation"
-        ]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $sets = [];
+        $params = [':id' => $id];
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
+        foreach ($data as $k => $v) {
+            $sets[] = "{$k} = :{$k}";
+            $params[":{$k}"] = $v;
+        }
 
-        return ($httpCode === 200) ? json_decode($response, true) : false;
+        $sql = "UPDATE datos_proyectos SET " . implode(',', $sets) . " WHERE id_proyect = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute($params);
     }
 
-    // 🔹 Eliminar proyecto
     public function delete($id)
     {
-        $ch = curl_init();
-        $url = SUPABASE_URL . "/rest/v1/datos_proyectos?id_proyect=eq.$id";
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            "apikey: " . SUPABASE_KEY,
-            "Authorization: Bearer " . SUPABASE_KEY,
-            "Content-Type: application/json"
-        ]);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        return $httpCode === 204;
+        $sql = "DELETE FROM datos_proyectos WHERE id_proyect = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':id' => $id]);
     }
 }

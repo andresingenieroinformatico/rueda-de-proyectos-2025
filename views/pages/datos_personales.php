@@ -16,15 +16,11 @@
 
     <p>Por favor completa los siguientes datos para registrar a los participantes del proyecto.</p>
 
-    <?php 
-        $id_proyect = $_GET['id_proyect'] ?? null;
-        if (!$id_proyect) {
-            die("<p style='color:red; text-align:center;'>Error: No se proporcionó el ID del proyecto.</p>");
-        }
-    ?>
+    <?php // Ahora este formulario registra los ponentes primero. Al enviar, se generará un token de sesión y se redirigirá para completar los datos del proyecto. ?>
 
+    <?php $next = $_GET['next'] ?? null; ?>
     <form action="index.php?controller=home&action=datos_personales" method="POST">
-        <input type="hidden" name="id_proyect" value="<?= htmlspecialchars($id_proyect) ?>">
+        <?php if ($next): ?><input type="hidden" name="next" value="<?= htmlspecialchars($next) ?>"><?php endif; ?>
 
         <fieldset>
             <legend>Datos del Docente Orientador</legend>
