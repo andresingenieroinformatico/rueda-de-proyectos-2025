@@ -23,10 +23,10 @@ class HomeController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $semestre = intval($_POST['semestre'] ?? 0);
             if ($semestre === 1) {
-                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_1");
+                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_1", true, 303);
                 exit();
             } elseif ($semestre >= 2 && $semestre <= 9) {
-                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_2");
+                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_2", true, 303);
                 exit();
             } else {
                 echo "Por favor selecciona un semestre válido.";
@@ -52,8 +52,8 @@ class HomeController
                 $token = uniqid('sess_', true);
             }
 
-            $pdo = db();
             try {
+                $pdo = db();
                 $pdo->beginTransaction();
 
                 $sql = "INSERT INTO datos_ponentes (docente, nombres, apellidos, cedula, telefono, semestre, jornada, correo, registration_token, id_proyect, created_at) VALUES (:docente, :nombres, :apellidos, :cedula, :telefono, :semestre, :jornada, :correo, :registration_token, NULL, NOW())";
@@ -81,7 +81,7 @@ class HomeController
                 header("Location: index.php?controller=home&action={$next}&token={$token}");
                 exit;
             } catch (Exception $e) {
-                if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
+                if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) $pdo->rollBack();
                 echo "Error al registrar los ponentes: " . $e->getMessage();
             }
         } else {
@@ -113,8 +113,8 @@ class HomeController
                 "semestre" => 1
             ];
 
-            $pdo = db();
             try {
+                $pdo = db();
                 $pdo->beginTransaction();
 
                 // Insertar proyecto
@@ -139,7 +139,7 @@ class HomeController
                 header("Location: index.php?controller=home&action=finalizacion");
                 exit;
             } catch (Exception $e) {
-                if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
+                if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) $pdo->rollBack();
                 echo "Error al registrar el proyecto: " . $e->getMessage();
             }
         } else {
@@ -173,8 +173,8 @@ class HomeController
                 "semestre" => 2
             ];
 
-            $pdo = db();
             try {
+                $pdo = db();
                 $pdo->beginTransaction();
 
                 // Insertar proyecto
@@ -199,7 +199,7 @@ class HomeController
                 header("Location: index.php?controller=home&action=finalizacion");
                 exit;
             } catch (Exception $e) {
-                if ($pdo && $pdo->inTransaction()) $pdo->rollBack();
+                if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) $pdo->rollBack();
                 echo "Error al registrar el proyecto: " . $e->getMessage();
             }
         } else {

@@ -164,7 +164,7 @@
             </div>
         </fieldset>
 
-        <button type="submit" class="submit-btn">Siguiente</button>
+        <button type="submit" class="submit-btn">Finalizar Inscripción</button>
     </form>
 </div>
 

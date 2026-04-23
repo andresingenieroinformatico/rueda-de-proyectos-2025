@@ -98,7 +98,7 @@
             <?php endfor; ?>
         </fieldset>
 
-        <button type="submit" class="submit-btn">Terminar Inscripción</button>
+        <button type="submit" class="submit-btn">Siguiente</button>
     </form>
 </div>
 
