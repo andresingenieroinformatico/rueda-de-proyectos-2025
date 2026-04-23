@@ -12,7 +12,19 @@ class PonenteModel
     public function __construct()
     {
         $this->supabase = function_exists('supabase') ? supabase() : null;
-        $this->pdo = $this->supabase ? null : db();
+
+        if (function_exists('should_use_supabase') && should_use_supabase()) {
+            if ($this->supabase === null) {
+                throw new RuntimeException(
+                    'Supabase esta configurado como backend, pero no pudo inicializarse. Revisa SUPABASE_URL y SUPABASE_SERVICE_KEY en Railway.'
+                );
+            }
+
+            $this->pdo = null;
+            return;
+        }
+
+        $this->pdo = db();
     }
 
     private function supabaseRequest(string $method, string $path, ?array $payload = null, array $extraHeaders = []): array
