@@ -1,9 +1,18 @@
 <?php
-require_once __DIR__ . '/../../config/database/conexion.php';
-require_once __DIR__ . '/../../config/database/mysql_conexion.php';
+require_once __DIR__ . '/../models/modelponent.php';
+require_once __DIR__ . '/../models/modelproyect.php';
 
 class HomeController
 {
+    private $ponenteModel;
+    private $proyectoModel;
+
+    public function __construct()
+    {
+        $this->ponenteModel = new PonenteModel();
+        $this->proyectoModel = new ProyectoModel();
+    }
+
     private function view($file, array $data = [])
     {
         $path = dirname(__DIR__, 2) . "/views/pages/{$file}.php";
@@ -12,7 +21,7 @@ class HomeController
             die(
                 defined('DEBUG') && DEBUG
                     ? "Vista no encontrada -> {$path}"
-                    : "La pagina solicitada no esta disponible."
+                    : 'La pagina solicitada no esta disponible.'
             );
         }
 
@@ -39,6 +48,82 @@ class HomeController
         return $message;
     }
 
+    private function nullIfEmpty($value)
+    {
+        if (!is_string($value)) {
+            return $value;
+        }
+
+        $value = trim($value);
+        return $value === '' ? null : $value;
+    }
+
+    private function buildPonentesPayload(string $docente, int $cantidad, $semestreGlobal, string $token): array
+    {
+        $rows = [];
+
+        for ($i = 1; $i <= $cantidad; $i++) {
+            $rows[] = [
+                'docente' => trim($docente),
+                'nombres' => trim($_POST["nombres{$i}"] ?? ''),
+                'apellidos' => trim($_POST["apellidos{$i}"] ?? ''),
+                'cedula' => $this->nullIfEmpty($_POST["cedula{$i}"] ?? null),
+                'telefono' => $this->nullIfEmpty($_POST["telefono{$i}"] ?? null),
+                'semestre' => $this->nullIfEmpty($_POST["semestre{$i}"] ?? $semestreGlobal),
+                'jornada' => $this->nullIfEmpty($_POST["jornada{$i}"] ?? null),
+                'correo' => $this->nullIfEmpty($_POST["correo{$i}"] ?? null),
+                'registration_token' => $token,
+            ];
+        }
+
+        return $rows;
+    }
+
+    private function extractProjectId($insertResult): ?int
+    {
+        if (is_int($insertResult) || ctype_digit((string) $insertResult)) {
+            return (int) $insertResult;
+        }
+
+        if (is_array($insertResult)) {
+            if (isset($insertResult['id_proyect'])) {
+                return (int) $insertResult['id_proyect'];
+            }
+
+            if (isset($insertResult[0]['id_proyect'])) {
+                return (int) $insertResult[0]['id_proyect'];
+            }
+        }
+
+        return null;
+    }
+
+    private function persistProject(array $dataProyecto, ?string $registrationToken, string $viewName, string $context): void
+    {
+        try {
+            $insertResult = $this->proyectoModel->insert($dataProyecto);
+            $projectId = $this->extractProjectId($insertResult);
+
+            if (!$projectId) {
+                throw new RuntimeException('No fue posible obtener el id del proyecto registrado.');
+            }
+
+            if ($registrationToken && !$this->ponenteModel->assignProjectByToken($registrationToken, $projectId)) {
+                throw new RuntimeException('No fue posible asociar los ponentes al proyecto.');
+            }
+
+            header('Location: index.php?controller=home&action=finalizacion');
+            exit;
+        } catch (Throwable $e) {
+            $this->logException($e, $context);
+            $this->view($viewName, [
+                'mensaje_resultado' => $this->buildErrorAlert(
+                    $this->formatUserError('No pudimos registrar el proyecto en este momento. Intenta nuevamente en unos minutos.', $e)
+                ),
+            ]);
+        }
+    }
+
     public function index()
     {
         $this->view('datos_personales');
@@ -46,59 +131,35 @@ class HomeController
 
     public function seleccionar_semestre()
     {
-        // La seleccion de semestre ahora se realiza directamente en la vista datos_personales.
         header('Location: index.php?controller=home&action=datos_personales', true, 303);
         exit();
     }
 
     public function datos_personales()
     {
-        // El formulario registra los ponentes primero y genera un token de sesion
-        // para completar luego los datos del proyecto.
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $docente = $_POST['docente'] ?? '';
             $cantidad = intval($_POST['cantidad'] ?? 0);
+            $semestreGlobal = $_POST['semestre_global'] ?? null;
 
             try {
                 $token = bin2hex(random_bytes(16));
-            } catch (Exception $e) {
+            } catch (Throwable $e) {
                 $token = uniqid('sess_', true);
             }
 
             try {
-                $pdo = db();
-                $pdo->beginTransaction();
+                $rows = $this->buildPonentesPayload($docente, $cantidad, $semestreGlobal, $token);
+                $inserted = $this->ponenteModel->insertMany($rows);
 
-                $sql = 'INSERT INTO datos_ponentes (docente, nombres, apellidos, cedula, telefono, semestre, jornada, correo, registration_token, id_proyect, created_at) VALUES (:docente, :nombres, :apellidos, :cedula, :telefono, :semestre, :jornada, :correo, :registration_token, NULL, NOW())';
-                $stmt = $pdo->prepare($sql);
-
-                $semestre_global = $_POST['semestre_global'] ?? null;
-                for ($i = 1; $i <= $cantidad; $i++) {
-                    $params = [
-                        ':docente' => $docente,
-                        ':nombres' => $_POST["nombres{$i}"] ?? '',
-                        ':apellidos' => $_POST["apellidos{$i}"] ?? '',
-                        ':cedula' => $_POST["cedula{$i}"] ?? '',
-                        ':telefono' => $_POST["telefono{$i}"] ?? '',
-                        ':semestre' => $_POST["semestre{$i}"] ?? $semestre_global,
-                        ':jornada' => $_POST["jornada{$i}"] ?? null,
-                        ':correo' => $_POST["correo{$i}"] ?? null,
-                        ':registration_token' => $token,
-                    ];
-
-                    $stmt->execute($params);
+                if (count($inserted) !== count($rows)) {
+                    throw new RuntimeException('No todos los ponentes pudieron registrarse correctamente.');
                 }
-
-                $pdo->commit();
 
                 $next = $_GET['next'] ?? $_POST['next'] ?? 'inscripcion_1';
                 header("Location: index.php?controller=home&action={$next}&token={$token}");
                 exit;
             } catch (Throwable $e) {
-                if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
-                    $pdo->rollBack();
-                }
-
                 $this->logException($e, 'registro_ponentes');
                 $this->view('datos_personales', [
                     'mensaje_resultado' => $this->buildErrorAlert(
@@ -115,7 +176,7 @@ class HomeController
     public function inscripcion_1()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $registration_token = $_POST['registration_token'] ?? null;
+            $registrationToken = $_POST['registration_token'] ?? null;
 
             $dataProyecto = [
                 'linea' => $_POST['linea'] ?? '',
@@ -137,44 +198,8 @@ class HomeController
                 'semestre' => 1,
             ];
 
-            try {
-                $pdo = db();
-                $pdo->beginTransaction();
-
-                $fields = array_keys($dataProyecto);
-                $placeholders = array_map(fn($f) => ':' . $f, $fields);
-                $sql = 'INSERT INTO datos_proyectos (' . implode(',', $fields) . ') VALUES (' . implode(',', $placeholders) . ')';
-                $stmt = $pdo->prepare($sql);
-                $params = [];
-                foreach ($dataProyecto as $k => $v) {
-                    $params[':' . $k] = $v;
-                }
-                $stmt->execute($params);
-                $id_proyect = (int) $pdo->lastInsertId();
-
-                if ($registration_token) {
-                    $sqlUp = 'UPDATE datos_ponentes SET id_proyect = :id_proyect WHERE registration_token = :token AND (id_proyect IS NULL OR id_proyect = \'\')';
-                    $stmt2 = $pdo->prepare($sqlUp);
-                    $stmt2->execute([':id_proyect' => $id_proyect, ':token' => $registration_token]);
-                }
-
-                $pdo->commit();
-
-                header('Location: index.php?controller=home&action=finalizacion');
-                exit;
-            } catch (Throwable $e) {
-                if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
-                    $pdo->rollBack();
-                }
-
-                $this->logException($e, 'registro_proyecto_semestre_1');
-                $this->view('inscripcion_1', [
-                    'mensaje_resultado' => $this->buildErrorAlert(
-                        $this->formatUserError('No pudimos registrar el proyecto en este momento. Intenta nuevamente en unos minutos.', $e)
-                    ),
-                ]);
-                return;
-            }
+            $this->persistProject($dataProyecto, $registrationToken, 'inscripcion_1', 'registro_proyecto_semestre_1');
+            return;
         }
 
         $this->view('inscripcion_1');
@@ -183,7 +208,7 @@ class HomeController
     public function inscripcion_2()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $registration_token = $_POST['registration_token'] ?? null;
+            $registrationToken = $_POST['registration_token'] ?? null;
 
             $dataProyecto = [
                 'linea' => $_POST['linea'] ?? '',
@@ -206,44 +231,8 @@ class HomeController
                 'semestre' => 2,
             ];
 
-            try {
-                $pdo = db();
-                $pdo->beginTransaction();
-
-                $fields = array_keys($dataProyecto);
-                $placeholders = array_map(fn($f) => ':' . $f, $fields);
-                $sql = 'INSERT INTO datos_proyectos (' . implode(',', $fields) . ') VALUES (' . implode(',', $placeholders) . ')';
-                $stmt = $pdo->prepare($sql);
-                $params = [];
-                foreach ($dataProyecto as $k => $v) {
-                    $params[':' . $k] = $v;
-                }
-                $stmt->execute($params);
-                $id_proyect = (int) $pdo->lastInsertId();
-
-                if ($registration_token) {
-                    $sqlUp = 'UPDATE datos_ponentes SET id_proyect = :id_proyect WHERE registration_token = :token AND (id_proyect IS NULL OR id_proyect = \'\')';
-                    $stmt2 = $pdo->prepare($sqlUp);
-                    $stmt2->execute([':id_proyect' => $id_proyect, ':token' => $registration_token]);
-                }
-
-                $pdo->commit();
-
-                header('Location: index.php?controller=home&action=finalizacion');
-                exit;
-            } catch (Throwable $e) {
-                if (isset($pdo) && $pdo instanceof PDO && $pdo->inTransaction()) {
-                    $pdo->rollBack();
-                }
-
-                $this->logException($e, 'registro_proyecto_semestres_2_9');
-                $this->view('inscripcion_2-9', [
-                    'mensaje_resultado' => $this->buildErrorAlert(
-                        $this->formatUserError('No pudimos registrar el proyecto en este momento. Intenta nuevamente en unos minutos.', $e)
-                    ),
-                ]);
-                return;
-            }
+            $this->persistProject($dataProyecto, $registrationToken, 'inscripcion_2-9', 'registro_proyecto_semestres_2_9');
+            return;
         }
 
         $this->view('inscripcion_2-9');
