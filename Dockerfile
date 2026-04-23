@@ -6,6 +6,10 @@ RUN docker-php-ext-install mysqli pdo pdo_mysql
 # Habilita mod_rewrite para poder usar .htaccess
 RUN a2enmod rewrite
 
+# Asegurar que solo se cargue un MPM (evita "More than one MPM loaded").
+# Para mod_php es seguro usar `mpm_prefork`. Deshabilitamos otros MPMs si existen.
+RUN a2dismod mpm_event mpm_worker || true && a2enmod mpm_prefork || true
+
 # Copia todos los archivos al directorio por defecto
 COPY . /var/www/html/
 
