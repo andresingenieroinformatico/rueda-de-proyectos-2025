@@ -26,5 +26,20 @@ for f in /etc/apache2/mods-enabled/mpm_*.load; do
 done
 set -e
 
+# --- Debug: listar módulos y archivos relacionados para logs ---
+echo "[DEBUG] /etc/apache2/mods-enabled:" >&2
+ls -la /etc/apache2/mods-enabled 2>&1 | sed -n '1,200p' >&2 || true
+echo "[DEBUG] Contenido de archivos mpm_*.load (si existen):" >&2
+for f in /etc/apache2/mods-enabled/mpm_*.load; do
+	[ -e "$f" ] || continue
+	echo "--- $f ---" >&2
+	sed -n '1,200p' "$f" >&2 || true
+done
+echo "[DEBUG] Buscando 'LoadModule .*mpm_' en /etc/apache2:" >&2
+grep -R "LoadModule .*mpm_" /etc/apache2 2>&1 | sed -n '1,200p' >&2 || true
+echo "[DEBUG] apachectl -M output (buscar mpm):" >&2
+apachectl -M 2>&1 | sed -n '1,200p' >&2 || true
+
+
 # Ejecutar el comando por defecto (apache2-foreground)
 exec "$@"
