@@ -96,11 +96,10 @@
                             <option value="nocturna">Nocturna</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="correo<?= $i ?>">Correo institucional:</label>
-                    <input type="email" id="correo<?= $i ?>" name="correo<?= $i ?>" placeholder="ejemplo@unipaz.edu.co">
+                    <div class="form-group">
+                        <label for="correo<?= $i ?>">Correo institucional:</label>
+                        <input type="email" id="correo<?= $i ?>" name="correo<?= $i ?>" placeholder="ejemplo@unipaz.edu.co">
+                    </div>
                 </div>
                 <hr style="margin: 25px 0; border: 0; border-top: 1px solid #ddd;">
             </div>
