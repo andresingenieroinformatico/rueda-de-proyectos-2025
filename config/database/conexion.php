@@ -144,3 +144,66 @@ function supabase()
 
     return $client;
 }
+
+/**
+ * Obtiene una conexión PDO a PostgreSQL de Supabase
+ * @return PDO|null
+ */
+function db(): ?PDO
+{
+    static $pdo = null;
+    static $initialized = false;
+
+    if ($initialized) {
+        return $pdo;
+    }
+
+    $initialized = true;
+
+    // Verificar si debemos usar PDO
+    if (!function_exists('should_use_pdo') || !should_use_pdo()) {
+        if (DEBUG) {
+            error_log('PDO deshabilitado. DATA_DRIVER=' . DATA_DRIVER . ', PDO_AVAILABLE=' . (PDO_AVAILABLE ? 'true' : 'false') . ', DB_HOST=' . DB_HOST);
+        }
+        return null;
+    }
+
+    try {
+        // Usar DATABASE_URL si está disponible (formato: postgres://user:password@host:port/database)
+        $dsn = '';
+        $username = DB_USER;
+        $password = DB_PASSWORD;
+        
+        if (defined('DATABASE_URL') && DATABASE_URL !== '') {
+            // Parsear DATABASE_URL
+            $url = parse_url(DATABASE_URL);
+            $host = $url['host'] ?? DB_HOST;
+            $port = $url['port'] ?? DB_PORT;
+            $dbname = ltrim($url['path'] ?? '', '/') ?: DB_NAME;
+            $username = $url['user'] ?? DB_USER;
+            $password = $url['pass'] ?? DB_PASSWORD;
+            
+            $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', $host, $port, $dbname);
+        } else {
+            // Usar configuración individual
+            $dsn = sprintf('pgsql:host=%s;port=%s;dbname=%s', DB_HOST, DB_PORT, DB_NAME);
+        }
+
+        $options = [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false,
+        ];
+
+        $pdo = new PDO($dsn, $username, $password, $options);
+
+        if (DEBUG) {
+            error_log('Conectado a PostgreSQL via PDO: ' . DB_HOST);
+        }
+
+        return $pdo;
+    } catch (PDOException $e) {
+        error_log('Error de conexión PDO: ' . $e->getMessage());
+        return null;
+    }
+}

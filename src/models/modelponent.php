@@ -11,20 +11,32 @@ class PonenteModel
 
     public function __construct()
     {
-        $this->supabase = function_exists('supabase') ? supabase() : null;
-
+        // Verificar si usamos Supabase (API REST)
+        $this->supabase = null;
         if (function_exists('should_use_supabase') && should_use_supabase()) {
+            $this->supabase = supabase();
             if ($this->supabase === null) {
                 throw new RuntimeException(
                     'Supabase esta configurado como backend, pero no pudo inicializarse. Revisa SUPABASE_URL y SUPABASE_SERVICE_KEY en Railway.'
                 );
             }
-
-            $this->pdo = null;
-            return;
         }
 
-        $this->pdo = db();
+        // Verificar si usamos PDO (conexión directa a PostgreSQL)
+        $this->pdo = null;
+        if (function_exists('should_use_pdo') && should_use_pdo()) {
+            $this->pdo = db();
+            if ($this->pdo === null) {
+                throw new RuntimeException(
+                    'PDO esta configurado como backend, pero no pudo conectarse. Revisa DB_HOST, DB_USER, DB_PASSWORD en .env.'
+                );
+            }
+        }
+
+        // Si no hay conexión, usar MySQL por defecto
+        if ($this->supabase === null && $this->pdo === null) {
+            $this->pdo = db();
+        }
     }
 
     private function supabaseRequest(string $method, string $path, ?array $payload = null, array $extraHeaders = []): array
@@ -86,9 +98,14 @@ class PonenteModel
             return is_array($response) ? $response : [];
         }
 
-        $sql = 'SELECT p.*, pr.titulo AS proyecto_titulo FROM datos_ponentes p LEFT JOIN datos_proyectos pr ON p.id_proyect = pr.id_proyect ORDER BY p.id_ponent DESC';
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll();
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sql = 'SELECT p.*, pr.titulo AS proyecto_titulo FROM datos_ponentes p LEFT JOIN datos_proyectos pr ON p.id_proyect = pr.id_proyect ORDER BY p.id_ponent DESC';
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll();
+        }
+
+        return [];
     }
 
     public function getBySemestre($semestre)
@@ -104,10 +121,15 @@ class PonenteModel
             return is_array($response) ? $response : [];
         }
 
-        $sql = 'SELECT p.*, pr.titulo AS proyecto_titulo FROM datos_ponentes p LEFT JOIN datos_proyectos pr ON p.id_proyect = pr.id_proyect WHERE p.semestre = :semestre ORDER BY p.id_ponent DESC';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':semestre' => $semestre]);
-        return $stmt->fetchAll();
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sql = 'SELECT p.*, pr.titulo AS proyecto_titulo FROM datos_ponentes p LEFT JOIN datos_proyectos pr ON p.id_proyect = pr.id_proyect WHERE p.semestre = :semestre ORDER BY p.id_ponent DESC';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':semestre' => $semestre]);
+            return $stmt->fetchAll();
+        }
+
+        return [];
     }
 
     public function getById($id)
@@ -122,10 +144,15 @@ class PonenteModel
             return (is_array($response) && !empty($response)) ? $response[0] : null;
         }
 
-        $sql = 'SELECT p.*, pr.titulo AS proyecto_titulo FROM datos_ponentes p LEFT JOIN datos_proyectos pr ON p.id_proyect = pr.id_proyect WHERE p.id_ponent = :id LIMIT 1';
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id]);
-        return $stmt->fetch() ?: null;
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sql = 'SELECT p.*, pr.titulo AS proyecto_titulo FROM datos_ponentes p LEFT JOIN datos_proyectos pr ON p.id_proyect = pr.id_proyect WHERE p.id_ponent = :id LIMIT 1';
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([':id' => $id]);
+            return $stmt->fetch() ?: null;
+        }
+
+        return null;
     }
 
     public function insert(array $data)
@@ -140,21 +167,26 @@ class PonenteModel
             return $result['data'] ?: false;
         }
 
-        $fields = [];
-        $placeholders = [];
-        $params = [];
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $fields = [];
+            $placeholders = [];
+            $params = [];
 
-        foreach ($data as $key => $value) {
-            $fields[] = $key;
-            $placeholders[] = ':' . $key;
-            $params[':' . $key] = $value;
+            foreach ($data as $key => $value) {
+                $fields[] = $key;
+                $placeholders[] = ':' . $key;
+                $params[':' . $key] = $value;
+            }
+
+            $sql = 'INSERT INTO datos_ponentes (' . implode(',', $fields) . ') VALUES (' . implode(',', $placeholders) . ')';
+            $stmt = $this->pdo->prepare($sql);
+            $ok = $stmt->execute($params);
+
+            return $ok ? (int) $this->pdo->lastInsertId() : false;
         }
 
-        $sql = 'INSERT INTO datos_ponentes (' . implode(',', $fields) . ') VALUES (' . implode(',', $placeholders) . ')';
-        $stmt = $this->pdo->prepare($sql);
-        $ok = $stmt->execute($params);
-
-        return $ok ? (int) $this->pdo->lastInsertId() : false;
+        return false;
     }
 
     public function insertMany(array $rows)
@@ -173,23 +205,28 @@ class PonenteModel
             return is_array($result['data']) ? $result['data'] : [];
         }
 
-        $insertedIds = [];
-        $this->pdo->beginTransaction();
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $insertedIds = [];
+            $this->pdo->beginTransaction();
 
-        try {
-            foreach ($rows as $row) {
-                $insertedIds[] = $this->insert($row);
+            try {
+                foreach ($rows as $row) {
+                    $insertedIds[] = $this->insert($row);
+                }
+
+                $this->pdo->commit();
+                return $insertedIds;
+            } catch (Throwable $e) {
+                if ($this->pdo->inTransaction()) {
+                    $this->pdo->rollBack();
+                }
+
+                throw $e;
             }
-
-            $this->pdo->commit();
-            return $insertedIds;
-        } catch (Throwable $e) {
-            if ($this->pdo->inTransaction()) {
-                $this->pdo->rollBack();
-            }
-
-            throw $e;
         }
+
+        return [];
     }
 
     public function update($id, array $data)
@@ -204,17 +241,22 @@ class PonenteModel
             return in_array($result['status'], [200, 204], true);
         }
 
-        $sets = [];
-        $params = [':id' => $id];
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sets = [];
+            $params = [':id' => $id];
 
-        foreach ($data as $key => $value) {
-            $sets[] = $key . ' = :' . $key;
-            $params[':' . $key] = $value;
+            foreach ($data as $key => $value) {
+                $sets[] = $key . ' = :' . $key;
+                $params[':' . $key] = $value;
+            }
+
+            $sql = 'UPDATE datos_ponentes SET ' . implode(',', $sets) . ' WHERE id_ponent = :id';
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute($params);
         }
 
-        $sql = 'UPDATE datos_ponentes SET ' . implode(',', $sets) . ' WHERE id_ponent = :id';
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute($params);
+        return false;
     }
 
     public function assignProjectByToken(string $token, int $projectId)
@@ -229,12 +271,17 @@ class PonenteModel
             return in_array($result['status'], [200, 204], true);
         }
 
-        $sql = 'UPDATE datos_ponentes SET id_proyect = :id_proyect WHERE registration_token = :token AND id_proyect IS NULL';
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([
-            ':id_proyect' => $projectId,
-            ':token' => $token,
-        ]);
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sql = 'UPDATE datos_ponentes SET id_proyect = :id_proyect WHERE registration_token = :token AND id_proyect IS NULL';
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute([
+                ':id_proyect' => $projectId,
+                ':token' => $token,
+            ]);
+        }
+
+        return false;
     }
 
     public function deleteByRegistrationToken(string $token)
@@ -250,7 +297,15 @@ class PonenteModel
             return in_array($result['status'], [200, 204], true);
         }
 
-        $sql = 'DELETE FROM datos_ponentes WHERE registration_token = :token';
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sql = 'DELETE FROM datos_ponentes WHERE registration_token = :token';
+            $stmt = $this->pdo->prepare($sql);
+            return $stmt->execute([':token' => $token]);
+        }
+
+        return false;
+    }
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':token' => $token]);
     }

@@ -1,9 +1,9 @@
 FROM php:8.2-apache
 
-# Instala extensiones PHP necesarias
+# Instala extensiones PHP necesarias (incluyendo pdo_pgsql para Supabase)
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libcurl4-openssl-dev \
-    && docker-php-ext-install curl mysqli pdo pdo_mysql \
+    && apt-get install -y --no-install-recommends libcurl4-openssl-dev libpq-dev \
+    && docker-php-ext-install curl mysqli pdo pdo_mysql pdo_pgsql \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

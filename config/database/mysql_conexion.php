@@ -49,7 +49,10 @@ function get_db_connection()
 }
 
 // Funcion de compatibilidad para retornos rapidos
-function db()
-{
-    return get_db_connection();
+// Solo definir si no existe (para permitir PDO de Supabase)
+if (!function_exists('db')) {
+    function db()
+    {
+        return get_db_connection();
+    }
 }

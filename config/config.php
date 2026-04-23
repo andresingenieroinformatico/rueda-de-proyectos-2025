@@ -71,12 +71,38 @@ define(
 );
 define('SUPABASE_CONFIGURED', is_valid_supabase_url(SUPABASE_URL) && SUPABASE_KEY !== '');
 
-// Permite forzar el backend con DATA_DRIVER=supabase o DATA_DRIVER=mysql
+// Permite forzar el backend con DATA_DRIVER=supabase, pdo, o mysql
 define('DATA_DRIVER', strtolower(get_env('DATA_DRIVER', (SUPABASE_CONFIGURED || SUPABASE_ENV_PRESENT) ? 'supabase' : 'mysql')));
 
 function should_use_supabase(): bool
 {
     return DATA_DRIVER === 'supabase' && SUPABASE_CONFIGURED;
+}
+
+// Configuración de PDO para PostgreSQL de Supabase
+// Soporta tanto variables individuales como DATABASE_URL de Supabase
+define('DATABASE_URL', get_env('DATABASE_URL', ''));
+define('DB_HOST', get_env('DB_HOST', ''));
+define('DB_PORT', get_env('DB_PORT', '5432'));
+define('DB_NAME', get_env('DB_NAME', 'postgres'));
+define('DB_USER', get_env('DB_USER', 'postgres'));
+define('DB_PASSWORD', get_env('DB_PASSWORD', ''));
+
+// Verificar si PDO está disponible
+define('PDO_AVAILABLE', extension_loaded('pdo') && extension_loaded('pdo_pgsql'));
+
+function should_use_pdo(): bool
+{
+    // Usar PDO si DATA_DRIVER=pdo Y hay configuración de base de datos
+    if (DATA_DRIVER !== 'pdo') {
+        return false;
+    }
+    
+    // Verificar si hay DATABASE_URL o configuración individual
+    $hasDatabaseUrl = DATABASE_URL !== '';
+    $hasIndividualConfig = DB_HOST !== '' && DB_USER !== '';
+    
+    return PDO_AVAILABLE && ($hasDatabaseUrl || $hasIndividualConfig);
 }
 
 // Deteccion mejorada del protocolo HTTPS para definir BASE_URL

@@ -11,20 +11,32 @@ class ProyectoModel
 
     public function __construct()
     {
-        $this->supabase = function_exists('supabase') ? supabase() : null;
-
+        // Verificar si usamos Supabase (API REST)
+        $this->supabase = null;
         if (function_exists('should_use_supabase') && should_use_supabase()) {
+            $this->supabase = supabase();
             if ($this->supabase === null) {
                 throw new RuntimeException(
                     'Supabase esta configurado como backend, pero no pudo inicializarse. Revisa SUPABASE_URL y SUPABASE_SERVICE_KEY en Railway.'
                 );
             }
-
-            $this->pdo = null;
-            return;
         }
 
-        $this->pdo = db();
+        // Verificar si usamos PDO (conexión directa a PostgreSQL)
+        $this->pdo = null;
+        if (function_exists('should_use_pdo') && should_use_pdo()) {
+            $this->pdo = db();
+            if ($this->pdo === null) {
+                throw new RuntimeException(
+                    'PDO esta configurado como backend, pero no pudo conectarse. Revisa DB_HOST, DB_USER, DB_PASSWORD en .env.'
+                );
+            }
+        }
+
+        // Si no hay conexión, usar MySQL por defecto
+        if ($this->supabase === null && $this->pdo === null) {
+            $this->pdo = db();
+        }
     }
 
     private function supabaseRequest(string $method, string $path, ?array $payload = null, array $extraHeaders = []): array
@@ -85,9 +97,14 @@ class ProyectoModel
             return is_array($response) ? $response : [];
         }
 
-        $sql = 'SELECT id_proyect, linea, fase, enfoque, asignaturas, aportes, titulo, introduccion, problema, justificacion, objetivog, objetivoe, referentes, metodologia, resultados, conclusiones, bibliografia, feedback, semestre, created_at, updated_at FROM datos_proyectos ORDER BY id_proyect DESC';
-        $stmt = $this->pdo->query($sql);
-        return $stmt->fetchAll();
+        // Usar PDO para PostgreSQL de Supabase o MySQL
+        if ($this->pdo) {
+            $sql = 'SELECT id_proyect, linea, fase, enfoque, asignaturas, aportes, titulo, introduccion, problema, justificacion, objetivog, objetivoe, referentes, metodologia, resultados, conclusiones, bibliografia, feedback, semestre, created_at, updated_at FROM datos_proyectos ORDER BY id_proyect DESC';
+            $stmt = $this->pdo->query($sql);
+            return $stmt->fetchAll();
+        }
+
+        return [];
     }
 
     public function getById($id)
