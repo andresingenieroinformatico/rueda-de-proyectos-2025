@@ -1,9 +1,10 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 require_once __DIR__ . '/../config/config.php';
+
+ini_set('display_errors', DEBUG ? '1' : '0');
+ini_set('display_startup_errors', DEBUG ? '1' : '0');
+ini_set('log_errors', '1');
+error_reporting(E_ALL);
 
 $controller = $_GET['controller'] ?? 'home'; 
 $action = $_GET['action'] ?? 'index';

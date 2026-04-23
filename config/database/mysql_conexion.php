@@ -33,20 +33,22 @@ function get_db_connection()
         $pdo = new PDO($dsn, $DB_USER, $DB_PASS, $options);
 
         if (defined('DEBUG') && DEBUG) {
-            error_log("Conexión PDO establecida a {$DB_HOST}:{$DB_PORT}/{$DB_NAME}");
+            error_log("Conexion PDO establecida a {$DB_HOST}:{$DB_PORT}/{$DB_NAME}");
         }
 
         return $pdo;
     } catch (PDOException $e) {
+        error_log("Error conexion PDO a {$DB_HOST}:{$DB_PORT}/{$DB_NAME}: " . $e->getMessage());
+
         if (defined('DEBUG') && DEBUG) {
-            error_log("Error conexión PDO: " . $e->getMessage());
-            echo "<pre>Error conexión PDO: " . htmlspecialchars($e->getMessage()) . "</pre>";
+            echo "<pre>Error conexion PDO: " . htmlspecialchars($e->getMessage()) . "</pre>";
         }
+
         throw $e;
     }
 }
 
-// Función de compatibilidad para retornos rápidos
+// Funcion de compatibilidad para retornos rapidos
 function db()
 {
     return get_db_connection();
