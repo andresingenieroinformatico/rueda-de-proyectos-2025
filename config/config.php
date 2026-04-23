@@ -41,10 +41,14 @@ define('SUPABASE_URL', trim(get_env('SUPABASE_URL', '')));
 define('SUPABASE_ANON_KEY', trim(get_env('SUPABASE_ANON_KEY', '')));
 define('SUPABASE_SERVICE_KEY', trim(get_env('SUPABASE_SERVICE_KEY', '')));
 define('SUPABASE_KEY', trim(get_env('SUPABASE_KEY', SUPABASE_SERVICE_KEY ?: SUPABASE_ANON_KEY)));
+define(
+    'SUPABASE_ENV_PRESENT',
+    SUPABASE_URL !== '' || SUPABASE_ANON_KEY !== '' || SUPABASE_SERVICE_KEY !== '' || SUPABASE_KEY !== ''
+);
 define('SUPABASE_CONFIGURED', is_valid_supabase_url(SUPABASE_URL) && SUPABASE_KEY !== '');
 
 // Permite forzar el backend con DATA_DRIVER=supabase o DATA_DRIVER=mysql
-define('DATA_DRIVER', strtolower(get_env('DATA_DRIVER', SUPABASE_CONFIGURED ? 'supabase' : 'mysql')));
+define('DATA_DRIVER', strtolower(get_env('DATA_DRIVER', (SUPABASE_CONFIGURED || SUPABASE_ENV_PRESENT) ? 'supabase' : 'mysql')));
 
 function should_use_supabase(): bool
 {
