@@ -3,17 +3,17 @@
 
 require_once __DIR__ . '/../../config/config.php';
 
-// Lee variables de entorno o constantes en config.php
-$DB_HOST = get_env('DB_HOST', getenv('DB_HOST') ?: '127.0.0.1');
-$DB_NAME = get_env('DB_NAME', getenv('DB_NAME') ?: 'rueda_proyectos');
-$DB_USER = get_env('DB_USER', getenv('DB_USER') ?: 'root');
-$DB_PASS = get_env('DB_PASS', getenv('DB_PASS') ?: '');
-$DB_PORT = get_env('DB_PORT', getenv('DB_PORT') ?: '3306');
-$DB_CHARSET = get_env('DB_CHARSET', 'utf8mb4');
+// Variables separadas para MySQL (fallback local)
+$MYSQL_HOST = get_env('MYSQL_HOST', '127.0.0.1');
+$MYSQL_NAME = get_env('MYSQL_NAME', 'rueda_proyectos');
+$MYSQL_USER = get_env('MYSQL_USER', 'root');
+$MYSQL_PASS = get_env('MYSQL_PASS', get_env('DB_PASS', ''));
+$MYSQL_PORT = get_env('MYSQL_PORT', '3306');
+$MYSQL_CHARSET = get_env('MYSQL_CHARSET', get_env('DB_CHARSET', 'utf8mb4'));
 
 function get_db_connection()
 {
-    global $DB_HOST, $DB_NAME, $DB_USER, $DB_PASS, $DB_PORT, $DB_CHARSET;
+    global $MYSQL_HOST, $MYSQL_NAME, $MYSQL_USER, $MYSQL_PASS, $MYSQL_PORT, $MYSQL_CHARSET;
 
     static $pdo = null;
 
@@ -21,7 +21,7 @@ function get_db_connection()
         return $pdo;
     }
 
-    $dsn = "mysql:host={$DB_HOST};port={$DB_PORT};dbname={$DB_NAME};charset={$DB_CHARSET}";
+    $dsn = "mysql:host={$MYSQL_HOST};port={$MYSQL_PORT};dbname={$MYSQL_NAME};charset={$MYSQL_CHARSET}";
 
     try {
         $options = [

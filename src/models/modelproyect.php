@@ -22,19 +22,10 @@ class ProyectoModel
             }
         }
 
-        // Verificar si usamos PDO (conexión directa a PostgreSQL)
+        // Usar PDO (PostgreSQL de Supabase o MySQL como fallback)
+        // La función db() ahora maneja el fallback automáticamente
         $this->pdo = null;
-        if (function_exists('should_use_pdo') && should_use_pdo()) {
-            $this->pdo = db();
-            if ($this->pdo === null) {
-                throw new RuntimeException(
-                    'PDO esta configurado como backend, pero no pudo conectarse. Revisa DB_HOST, DB_USER, DB_PASSWORD en .env.'
-                );
-            }
-        }
-
-        // Si no hay conexión, usar MySQL por defecto
-        if ($this->supabase === null && $this->pdo === null) {
+        if ($this->supabase === null) {
             $this->pdo = db();
         }
     }
