@@ -5,7 +5,6 @@
         <h2>Novena Rueda de Proyectos</h2>
     </div>
     <nav>
-        <a href="?controller=admin&action=login">Iniciar sesión</a>
     </nav>
 </header>
 

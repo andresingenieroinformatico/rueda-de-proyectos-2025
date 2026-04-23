@@ -42,13 +42,10 @@ $baseFolder = $baseFolder === '/' ? '' : $baseFolder;
 
 define('BASE_URL', $protocol . $host . $baseFolder . '/');
 
-// Admin credentials
-define('ADMIN_USER', get_env('ADMIN_USER', 'mehandhesgithub@gmail.com'));
-define('ADMIN_PASS', get_env('ADMIN_PASS', '123456789'));
+// (Se eliminaron las credenciales del administrador porque la funcionalidad Admin fue removida)
 
 // Validación básica de configuración de Supabase
 if (empty(SUPABASE_URL) || empty(SUPABASE_KEY)) {
-    echo 'funciona';
     if (DEBUG) {
         die("Error: SUPABASE_URL o SUPABASE_KEY no están definidos en .env");
     }

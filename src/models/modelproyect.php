@@ -17,7 +17,7 @@ class ProyectoModel
     {
         $response = $this->supabase
             ->from('datos_proyectos')
-            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introducion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
+            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introduccion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
             ->execute();
 
         return is_array($response) ? $response : [];
@@ -28,7 +28,7 @@ class ProyectoModel
     {
         $response = $this->supabase
             ->from('datos_proyectos')
-            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introducion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
+            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introduccion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
             ->eq('id_proyect', $id)
             ->execute();
 
@@ -40,7 +40,7 @@ class ProyectoModel
     {
         $response = $this->supabase
             ->from('datos_proyectos')
-            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introducion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
+            ->select('id_proyect,linea,fase,enfoque,asignaturas,aportes,titulo,introduccion,problema,justificacion,objetivog,objetivoe,referentes,metodologia,resultados,conclusiones,bibliografia,feedback,semestre')
             ->eq('semestre', $semestre)
             ->execute();
 
