@@ -1,8 +1,8 @@
 #!/bin/sh
 set -e
 
-# Si no viene PORT desde el entorno, fallback a 10000 (opcional)
-: "${PORT:=10000}"
+# Si no viene PORT desde el entorno, fallback a 80 (opcional)
+: "${PORT:=80}"
 
 # Modificar configuración de Apache en tiempo de ejecución para escuchar en $PORT
 # Intentamos reemplazar las ocurrencias más comunes
