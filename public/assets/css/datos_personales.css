@@ -126,9 +126,10 @@ textarea:focus {
 }
 
 .form-group-inline {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 20px;
+    align-items: start;
 }
 
 .form-group-inline.small-gap {
@@ -136,8 +137,8 @@ textarea:focus {
 }
 
 .form-group-inline .form-group {
-    flex: 1;
-    min-width: 200px;
+    min-width: 0;
+    margin-bottom: 0;
 }
 
 /* =========================
@@ -213,8 +214,8 @@ hr {
     }
 
     .form-group-inline {
-        flex-direction: column;
-        gap: 0;
+        grid-template-columns: 1fr;
+        gap: 18px;
     }
 
     .submit-btn {
