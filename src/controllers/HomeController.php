@@ -15,25 +15,15 @@ class HomeController
 
     public function index()
     {
-        $this->view('seleccionar_semestre');
+        $this->view('datos_personales');
     }
 
     public function seleccionar_semestre()
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $semestre = intval($_POST['semestre'] ?? 0);
-            if ($semestre === 1) {
-                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_1&semestre=1", true, 303);
-                exit();
-            } elseif ($semestre >= 2 && $semestre <= 9) {
-                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_2&semestre={$semestre}", true, 303);
-                exit();
-            } else {
-                echo "Por favor selecciona un semestre válido.";
-            }
-        } else {
-            $this->view('seleccionar_semestre');
-        }
+        // La selección de semestre ahora se realiza directamente en la vista `datos_personales`.
+        // Redirigimos cualquier acceso a esta acción hacia `datos_personales`.
+        header("Location: index.php?controller=home&action=datos_personales", true, 303);
+        exit();
     }
 
     // --- REGISTRO DE PONENTES ---
