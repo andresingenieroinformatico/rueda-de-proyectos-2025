@@ -19,8 +19,13 @@
     <?php // Ahora este formulario registra los ponentes primero. Al enviar, se generará un token de sesión y se redirigirá para completar los datos del proyecto. ?>
 
     <?php $next = $_GET['next'] ?? null; ?>
+    <?php $selected_semester = intval($_GET['semestre'] ?? $_POST['semestre'] ?? 0); ?>
+    <?php if ($selected_semester): ?>
+        <p class="info-semestre">Semestre seleccionado: <strong>Semestre <?= $selected_semester ?></strong></p>
+    <?php endif; ?>
     <form action="index.php?controller=home&action=datos_personales" method="POST">
         <?php if ($next): ?><input type="hidden" name="next" value="<?= htmlspecialchars($next) ?>"><?php endif; ?>
+        <?php if ($selected_semester): ?><input type="hidden" name="semestre_global" value="<?= $selected_semester ?>"><?php endif; ?>
 
         <fieldset>
             <legend>Datos del Docente Orientador</legend>
@@ -72,12 +77,19 @@
                 <div class="form-group-inline">
                     <div class="form-group">
                         <label for="semestre<?= $i ?>">Semestre:</label>
-                        <select id="semestre<?= $i ?>" name="semestre<?= $i ?>">
-                            <option value="">Seleccione</option>
-                            <?php for ($s = 1; $s <= 9; $s++): ?>
-                                <option value="<?= $s ?>">Semestre <?= $s ?></option>
-                            <?php endfor; ?>
-                        </select>
+                        <?php if ($selected_semester): ?>
+                            <input type="hidden" name="semestre<?= $i ?>" value="<?= $selected_semester ?>">
+                            <select id="semestre<?= $i ?>" name="semestre_display<?= $i ?>" disabled>
+                                <option value="<?= $selected_semester ?>">Semestre <?= $selected_semester ?></option>
+                            </select>
+                        <?php else: ?>
+                            <select id="semestre<?= $i ?>" name="semestre<?= $i ?>">
+                                <option value="">Seleccione</option>
+                                <?php for ($s = 1; $s <= 9; $s++): ?>
+                                    <option value="<?= $s ?>">Semestre <?= $s ?></option>
+                                <?php endfor; ?>
+                            </select>
+                        <?php endif; ?>
                     </div>
                     <div class="form-group">
                         <label for="jornada<?= $i ?>">Jornada:</label>

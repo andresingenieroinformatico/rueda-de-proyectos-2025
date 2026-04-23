@@ -23,10 +23,10 @@ class HomeController
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $semestre = intval($_POST['semestre'] ?? 0);
             if ($semestre === 1) {
-                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_1", true, 303);
+                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_1&semestre=1", true, 303);
                 exit();
             } elseif ($semestre >= 2 && $semestre <= 9) {
-                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_2", true, 303);
+                header("Location: index.php?controller=home&action=datos_personales&next=inscripcion_2&semestre={$semestre}", true, 303);
                 exit();
             } else {
                 echo "Por favor selecciona un semestre válido.";
