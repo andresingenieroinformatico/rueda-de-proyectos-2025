@@ -59,6 +59,7 @@ class HomeController
                 $sql = "INSERT INTO datos_ponentes (docente, nombres, apellidos, cedula, telefono, semestre, jornada, correo, registration_token, id_proyect, created_at) VALUES (:docente, :nombres, :apellidos, :cedula, :telefono, :semestre, :jornada, :correo, :registration_token, NULL, NOW())";
                 $stmt = $pdo->prepare($sql);
 
+                $semestre_global = $_POST['semestre_global'] ?? null;
                 for ($i = 1; $i <= $cantidad; $i++) {
                     $params = [
                         ':docente' => $docente,
@@ -66,7 +67,7 @@ class HomeController
                         ':apellidos' => $_POST["apellidos{$i}"] ?? '',
                         ':cedula' => $_POST["cedula{$i}"] ?? '',
                         ':telefono' => $_POST["telefono{$i}"] ?? '',
-                        ':semestre' => $_POST["semestre{$i}"] ?? null,
+                        ':semestre' => $_POST["semestre{$i}"] ?? $semestre_global,
                         ':jornada' => $_POST["jornada{$i}"] ?? null,
                         ':correo' => $_POST["correo{$i}"] ?? null,
                         ':registration_token' => $token
