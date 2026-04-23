@@ -21,7 +21,7 @@
 
     <?php $next = $_GET['next'] ?? null; ?>
     <?php $selected_semester = intval($_GET['semestre'] ?? $_POST['semestre_global'] ?? 0); ?>
-    <form action="index.php?controller=home&action=datos_personales" method="POST">
+    <form action="<?= BASE_URL ?>?controller=home&action=datos_personales" method="POST">
         <?php if ($next): ?><input type="hidden" name="next" value="<?= htmlspecialchars($next) ?>"><?php endif; ?>
 
         <fieldset>

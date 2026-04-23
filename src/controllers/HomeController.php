@@ -112,7 +112,7 @@ class HomeController
                 throw new RuntimeException('No fue posible asociar los ponentes al proyecto.');
             }
 
-            header('Location: index.php?controller=home&action=finalizacion');
+            header('Location: ' . BASE_URL . '?controller=home&action=finalizacion', true, 303);
             exit;
         } catch (Throwable $e) {
             $this->logException($e, $context);
@@ -131,7 +131,7 @@ class HomeController
 
     public function seleccionar_semestre()
     {
-        header('Location: index.php?controller=home&action=datos_personales', true, 303);
+        header('Location: ' . BASE_URL . '?controller=home&action=datos_personales', true, 303);
         exit();
     }
 
@@ -157,7 +157,11 @@ class HomeController
                 }
 
                 $next = $_GET['next'] ?? $_POST['next'] ?? 'inscripcion_1';
-                header("Location: index.php?controller=home&action={$next}&token={$token}");
+                header(
+                    'Location: ' . BASE_URL . '?controller=home&action=' . rawurlencode($next) . '&token=' . rawurlencode($token),
+                    true,
+                    303
+                );
                 exit;
             } catch (Throwable $e) {
                 $this->logException($e, 'registro_ponentes');
