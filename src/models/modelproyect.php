@@ -39,7 +39,10 @@ class ProyectoModel
             $stmt = $this->pdo()->prepare($sql . ' RETURNING id_proyect');
             $stmt->execute($params);
             $id = $stmt->fetchColumn();
-            return $id !== false ? (int) $id : false;
+            if ($id === false) {
+                throw new RuntimeException("No se pudo obtener el ID del proyecto insertado en Supabase.");
+            }
+            return (int) $id;
         }
 
         $stmt = $this->pdo()->prepare($sql);

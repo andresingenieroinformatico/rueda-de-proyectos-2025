@@ -20,6 +20,7 @@
         <?php if ($registration_token): ?>
             <input type="hidden" name="registration_token" value="<?= htmlspecialchars($registration_token) ?>">
         <?php endif; ?>
+        <input type="hidden" name="semestre" value="<?= htmlspecialchars($_GET['semestre'] ?? '2') ?>" />
         <fieldset>
             <legend>Datos del Proyecto</legend>
             <h3>Línea a la que Pertenece</h3>

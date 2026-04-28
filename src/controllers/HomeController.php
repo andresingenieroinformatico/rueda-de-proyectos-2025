@@ -69,7 +69,7 @@ class HomeController
                 'apellidos' => trim($_POST["apellidos{$i}"] ?? ''),
                 'cedula' => $this->nullIfEmpty($_POST["cedula{$i}"] ?? null),
                 'telefono' => $this->nullIfEmpty($_POST["telefono{$i}"] ?? null),
-                'semestre' => $this->nullIfEmpty($_POST["semestre{$i}"] ?? $semestreGlobal),
+                'semestre' => $this->nullIfEmpty($semestreGlobal),
                 'jornada' => $this->nullIfEmpty($_POST["jornada{$i}"] ?? null),
                 'correo' => $this->nullIfEmpty($_POST["correo{$i}"] ?? null),
                 'registration_token' => $token,
@@ -152,13 +152,15 @@ class HomeController
                 $rows = $this->buildPonentesPayload($docente, $cantidad, $semestreGlobal, $token);
                 $inserted = $this->ponenteModel->insertMany($rows);
 
-                if (count($inserted) !== count($rows)) {
-                    throw new RuntimeException('No todos los ponentes pudieron registrarse correctamente.');
+                if (empty($inserted) || count($inserted) !== count($rows)) {
+                    throw new RuntimeException('No fue posible completar el registro de todos los ponentes.');
                 }
 
                 $next = $_GET['next'] ?? $_POST['next'] ?? 'inscripcion_1';
                 header(
-                    'Location: ' . BASE_URL . '?controller=home&action=' . rawurlencode($next) . '&token=' . rawurlencode($token),
+                    'Location: ' . BASE_URL . '?controller=home&action=' . rawurlencode($next) . 
+                    '&token=' . rawurlencode($token) . 
+                    '&semestre=' . rawurlencode($semestreGlobal),
                     true,
                     303
                 );
@@ -199,7 +201,7 @@ class HomeController
                 'conclusiones' => $_POST['conclusiones'] ?? '',
                 'bibliografia' => $_POST['bibliografia'] ?? '',
                 'feedback' => $_POST['feedback'] ?? '',
-                'semestre' => 1,
+                'semestre' => $_POST['semestre'] ?? $_GET['semestre'] ?? 1,
             ];
 
             $this->persistProject($dataProyecto, $registrationToken, 'inscripcion_1', 'registro_proyecto_semestre_1');
@@ -232,7 +234,7 @@ class HomeController
                 'conclusiones' => $_POST['conclusiones'] ?? '',
                 'bibliografia' => $_POST['bibliografia'] ?? '',
                 'feedback' => $_POST['feedback'] ?? '',
-                'semestre' => 2,
+                'semestre' => $_POST['semestre'] ?? $_GET['semestre'] ?? 2,
             ];
 
             $this->persistProject($dataProyecto, $registrationToken, 'inscripcion_2-9', 'registro_proyecto_semestres_2_9');

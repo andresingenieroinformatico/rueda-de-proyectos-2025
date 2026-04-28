@@ -87,7 +87,11 @@ class PonenteModel
 
         try {
             foreach ($rows as $row) {
-                $insertedIds[] = $this->insertAndReturnId($row);
+                $id = $this->insertAndReturnId($row);
+                if ($id === false) {
+                    throw new RuntimeException('Fallo al insertar un ponente: ' . json_encode($row));
+                }
+                $insertedIds[] = $id;
             }
 
             $pdo->commit();
