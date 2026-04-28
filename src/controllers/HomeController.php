@@ -152,7 +152,12 @@ class HomeController
                     throw new RuntimeException('No fue posible completar el registro de todos los ponentes.');
                 }
 
-                $next = $_GET['next'] ?? $_POST['next'] ?? 'inscripcion_1';
+                // Determinar el siguiente paso basado en el semestre si no se especifica 'next'
+                $next = $_GET['next'] ?? $_POST['next'] ?? null;
+                if ($next === null) {
+                    $next = (intval($semestreGlobal) === 1) ? 'inscripcion_1' : 'inscripcion_2';
+                }
+
                 header(
                     'Location: ' . BASE_URL . '?controller=home&action=' . rawurlencode($next) . 
                     '&token=' . rawurlencode($token) . 
