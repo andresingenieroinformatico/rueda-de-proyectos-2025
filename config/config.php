@@ -13,7 +13,15 @@ if (file_exists($env_path)) {
 function get_env($key, $default = '')
 {
     global $env;
-    return getenv($key) ?: ($_ENV[$key] ?? $_SERVER[$key] ?? $env[$key] ?? $default);
+    // Prioridad: 1. getenv() (Sistema/Railway), 2. $_ENV, 3. $_SERVER, 4. Archivo .env, 5. Default
+    $val = getenv($key);
+    if ($val !== false) return $val;
+    
+    if (isset($_ENV[$key])) return $_ENV[$key];
+    if (isset($_SERVER[$key])) return $_SERVER[$key];
+    if (isset($env[$key])) return $env[$key];
+    
+    return $default;
 }
 
 // Entorno y modo debug
