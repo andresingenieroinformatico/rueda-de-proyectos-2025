@@ -41,11 +41,7 @@ class HomeController
 
     private function formatUserError(string $message, Throwable $e): string
     {
-        if (defined('DEBUG') && DEBUG) {
-            return $message . ' Detalle: ' . $e->getMessage();
-        }
-
-        return $message;
+        return $message . ' Detalle: ' . $e->getMessage();
     }
 
     private function nullIfEmpty($value)
